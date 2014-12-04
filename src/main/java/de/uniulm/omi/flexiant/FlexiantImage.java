@@ -2,14 +2,14 @@ package de.uniulm.omi.flexiant;
 
 import de.uniulm.omi.flexiant.extility.Image;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class FlexiantImage {
 	
-	private Image image;
+	private final Image image;
 	
-	public FlexiantImage(Image image) {
-		if(image == null) {
-			throw new IllegalArgumentException("The parameter image must not be null.");
-		}
+	public FlexiantImage(final Image image) {
+		checkNotNull(image);
 		this.image = image;
 	}
 

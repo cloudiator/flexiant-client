@@ -18,6 +18,7 @@ package de.uniulm.omi.flexiant;
 
 import de.uniulm.omi.flexiant.extility.*;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,37 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
             servers.add(new FlexiantServer((Server) o));
         }
         return servers;
+    }
+
+    /**
+     * Returns all images.
+     *
+     * @return all images.
+     * @throws FlexiantException
+     */
+    public List<FlexiantImage> getImages() throws FlexiantException {
+        List<FlexiantImage> images = new ArrayList<FlexiantImage>();
+        for(Object o : this.getResources(ResourceType.IMAGE)) {
+            images.add(new FlexiantImage((Image) o));
+        }
+        return images;
+    }
+
+    /**
+     * Returns all locations.
+     *
+     * @return all locations.
+     * @throws FlexiantException
+     */
+    public List<FlexiantLocation> getLocations() throws FlexiantException {
+        List<FlexiantLocation> locations = new ArrayList<FlexiantLocation>();
+        for(Object o : this.getResources(ResourceType.VDC)) {
+            locations.add(FlexiantLocation.from((Vdc) o, (Cluster) this.getResource(((Vdc) o).getClusterUUID(), ResourceType.CLUSTER)));
+        }
+        for(Object o : this.getResources(ResourceType.CLUSTER)) {
+            locations.add(FlexiantLocation.from((Cluster) o));
+        }
+        return locations;
     }
 
     /**
@@ -256,6 +288,7 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return a server object containing the information about the server if any, otherwise null.
      * @throws FlexiantException
      */
+    @Nullable
     public FlexiantServer getServer(final String serverUUID) throws FlexiantException {
         final Server server = (Server) this.getResource(serverUUID, ResourceType.SERVER);
         if (server == null) {
@@ -271,6 +304,7 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return information about the image if any, otherwise null.
      * @throws FlexiantException
      */
+    @Nullable
     public FlexiantImage getImage(final String imageUUID) throws FlexiantException {
         final Image image = (Image) this.getResource(imageUUID, ResourceType.IMAGE);
         if (image == null) {
@@ -288,6 +322,7 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return an image object if found, null otherwise.
      * @throws FlexiantException
      */
+    @Nullable
     public FlexiantImage getImage(final String imageUUID, final String locationUUID) throws FlexiantException {
         final Image image = (Image) this.getResource(imageUUID, locationUUID, ResourceType.IMAGE);
         if (image == null) {
@@ -303,6 +338,7 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return information about the hardware if any, otherwise null.
      * @throws FlexiantException
      */
+    @Nullable
     public FlexiantHardware getHardware(final String hardwareUUID) throws FlexiantException {
         final ProductOffer productOffer = (ProductOffer) this.getResource(hardwareUUID, ResourceType.PRODUCTOFFER);
         if (productOffer == null) {
@@ -318,12 +354,44 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return an object representing the location if any, otherwise null.
      * @throws FlexiantException
      */
+    @Nullable
     public FlexiantLocation getLocation(final String locationUUID) throws FlexiantException {
-        final Vdc vdc = (Vdc) this.getResource(locationUUID, ResourceType.VDC);
-        if (vdc == null) {
-            return null;
+
+        final Cluster cluster = this.getCluster(locationUUID);
+        if(cluster != null) {
+            return FlexiantLocation.from(cluster);
         }
-        return new FlexiantLocation(vdc);
+        final Vdc vdc = this.getVdc(locationUUID);
+        if(vdc != null) {
+            return FlexiantLocation.from(vdc, cluster);
+        }
+        return null;
+    }
+
+    /**
+     * Loads the cluster with the given uuid.
+     *
+     * @param clusterUUID the uuid of the cluster.
+     * @return the cluster identified by the uuid or null.
+     *
+     * @throws FlexiantException
+     */
+    @Nullable
+    protected Cluster getCluster(final String clusterUUID) throws FlexiantException {
+        return (Cluster) this.getResource(clusterUUID, ResourceType.CLUSTER);
+    }
+
+    /**
+     * Loads the vdc with the given uuid.
+     *
+     * @param vdcUUID the uuid of the vdc.
+     * @return the vdc identified by the uuid or null.
+     *
+     * @throws FlexiantException
+     */
+    @Nullable
+    protected Vdc getVdc(final String vdcUUID) throws FlexiantException {
+        return (Vdc) this.getResource(vdcUUID, ResourceType.VDC);
     }
 
     /**
@@ -334,6 +402,7 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return an object representing the resource if any, otherwise null.
      * @throws FlexiantException if an error occurred during the call to the api.
      */
+    @Nullable
     protected Object getResource(final String resourceUUID, final ResourceType type) throws FlexiantException {
 
         SearchFilter sf = new SearchFilter();
@@ -359,6 +428,7 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return the resource if found, null if not.
      * @throws FlexiantException if multiple resources where found or an error occurred during the call to the api.
      */
+    @Nullable
     protected Object getResource(final String ressourceUUID, final String locationUUID, final ResourceType type) throws FlexiantException {
         SearchFilter sf = new SearchFilter();
         FilterCondition fcResource = new FilterCondition();
@@ -386,6 +456,7 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return the resource or null if not found.
      * @throws FlexiantException if multiple resources are returned or an error occurs while contacting the api.
      */
+    @Nullable
     protected Object getSingleResource(final SearchFilter sf, final ResourceType type) throws FlexiantException {
         try {
             ListResult result = this.getService().listResources(sf, null, type);
@@ -416,7 +487,7 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return a list containing all resources matching the request.
      * @throws FlexiantException if an error occurs while contacting the api.
      */
-    protected List<? extends Object> getResources(final String prefix, final String attribute, final ResourceType type) throws FlexiantException {
+    protected List<?> getResources(final String prefix, final String attribute, final ResourceType type) throws FlexiantException {
 
         SearchFilter sf = new SearchFilter();
         FilterCondition fc = new FilterCondition();
@@ -442,7 +513,7 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return a list of all resources of the given type.
      * @throws FlexiantException
      */
-    protected List<? extends Object> getResources(final ResourceType type) throws FlexiantException {
+    protected List<?> getResources(final ResourceType type) throws FlexiantException {
         try {
             return this.getService().listResources(null, null, type).getList();
         } catch (ExtilityException e) {

@@ -22,20 +22,22 @@ import de.uniulm.omi.flexiant.extility.NetworkType;
 import de.uniulm.omi.flexiant.extility.Nic;
 import de.uniulm.omi.flexiant.extility.Server;
 
+import javax.annotation.Nullable;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * Wrapper for the flexiant server class.
  *
- * @see net.flexiant.extility.Server
+ * @see de.uniulm.omi.flexiant.extility.Server
  */
 public class FlexiantServer {
 
-	private Server server;
+	private final Server server;
 	
-	public FlexiantServer(Server server) {
-		if(server == null) {
-			throw new IllegalArgumentException("The parameter server must not be null.");
-		}
+	public FlexiantServer(final Server server) {
+		checkNotNull(server);
 		this.server = server;
 	}
 	
@@ -43,10 +45,11 @@ public class FlexiantServer {
 		return server.getResourceUUID();
 	}
 
+	@Nullable
     public String getPublicIpAddress() {
-    	for (Nic nic : this.server.getNics()) {
+    	for (final Nic nic : this.server.getNics()) {
             if (nic.getNetworkType().equals(NetworkType.IP)) {
-                for (Ip ip : nic.getIpAddresses()) {
+                for (final Ip ip : nic.getIpAddresses()) {
                     if (ip.getType().equals(IpType.IPV_4)) {
                         return ip.getIpAddress();
                     }

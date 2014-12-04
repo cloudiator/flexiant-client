@@ -2,14 +2,14 @@ package de.uniulm.omi.flexiant;
 
 import de.uniulm.omi.flexiant.extility.ProductOffer;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class FlexiantHardware {
 
-	private ProductOffer productOffer;
+	private final ProductOffer productOffer;
 
-	public FlexiantHardware(ProductOffer productOffer) {
-		if(productOffer == null) {
-			throw new IllegalArgumentException("The parameter productOffer must not be null.");
-		}
+	public FlexiantHardware(final ProductOffer productOffer) {
+		checkNotNull(productOffer);
 		this.productOffer = productOffer;
 	}
 	
