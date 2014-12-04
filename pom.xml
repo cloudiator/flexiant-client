@@ -21,11 +21,6 @@
 			<name>OMI Releases</name>
 			<url>http://eladron.e-technik.uni-ulm.de:8081/nexus/content/repositories/releases</url>
 		</repository>
-		<snapshotRepository>
-            		<id>omi-snapshots</id>
-            		<name>OMI Snapshots</name>
-            		<url>http://eladron.e-technik.uni-ulm.de:8081/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
 	</repositories>
 
 	<dependencies>
@@ -45,8 +40,14 @@
 	<distributionManagement>
 		<repository>
 			<id>omi</id>
-			<name>omi</name>
+			<name>OMI Releases</name>
+			<url>http://eladron.e-technik.uni-ulm.de:8081/nexus/content/repositories/releases</url>
 		</repository>
+		<snapshotRepository>
+            		<id>omi-snapshots</id>
+            		<name>OMI Snapshots</name>
+            		<url>http://eladron.e-technik.uni-ulm.de:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
 	</distributionManagement>
 
     <build>
