@@ -19,19 +19,39 @@ package de.uniulm.omi.flexiant;
 import de.uniulm.omi.flexiant.extility.*;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Client for calling compute operations on flexiants extility api.
  */
-public class FlexiantComputeClient extends FlexiantBaseClient {
+public class FlexiantComputeClient {
+
+    private final FlexiantBaseClient flexiantBaseClient;
 
     /**
      * @see de.uniulm.omi.flexiant.FlexiantComputeClient#FlexiantComputeClient(String, String, String)
      */
     public FlexiantComputeClient(final String endpoint, final String apiUserName, final String password) {
-        super(endpoint, apiUserName, password);
+        flexiantBaseClient = new FlexiantBaseClient(endpoint, apiUserName, password);
+    }
+
+    /**
+     * @see FlexiantComputeClient#getService()
+     */
+    protected UserService getService() {
+        return flexiantBaseClient.getService();
+    }
+
+    /**
+     * @see FlexiantComputeClient#getCustomerUUID()
+     */
+    protected String getCustomerUUID() {
+        return flexiantBaseClient.getCustomerUUID();
     }
 
     /**
@@ -41,8 +61,8 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return a list of servers matching the prefix
      * @throws FlexiantException
      */
-    public List<FlexiantServer> getServers(final String prefix) throws FlexiantException {
-        List<FlexiantServer> servers = new ArrayList<FlexiantServer>();
+    public Set<FlexiantServer> getServers(final String prefix) throws FlexiantException {
+        Set<FlexiantServer> servers = new HashSet<FlexiantServer>();
         for (Object o : this.getResources(prefix, "resourceName", ResourceType.SERVER)) {
             servers.add(new FlexiantServer((Server) o));
         }
@@ -55,8 +75,8 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return all servers.
      * @throws FlexiantException
      */
-    public List<FlexiantServer> getServers() throws FlexiantException {
-        List<FlexiantServer> servers = new ArrayList<FlexiantServer>();
+    public Set<FlexiantServer> getServers() throws FlexiantException {
+        Set<FlexiantServer> servers = new HashSet<FlexiantServer>();
         for (Object o : this.getResources(ResourceType.SERVER)) {
             servers.add(new FlexiantServer((Server) o));
         }
@@ -69,9 +89,9 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return all images.
      * @throws FlexiantException
      */
-    public List<FlexiantImage> getImages() throws FlexiantException {
-        List<FlexiantImage> images = new ArrayList<FlexiantImage>();
-        for(Object o : this.getResources(ResourceType.IMAGE)) {
+    public Set<FlexiantImage> getImages() throws FlexiantException {
+        Set<FlexiantImage> images = new HashSet<FlexiantImage>();
+        for (Object o : this.getResources(ResourceType.IMAGE)) {
             images.add(new FlexiantImage((Image) o));
         }
         return images;
@@ -83,12 +103,12 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @return all locations.
      * @throws FlexiantException
      */
-    public List<FlexiantLocation> getLocations() throws FlexiantException {
-        List<FlexiantLocation> locations = new ArrayList<FlexiantLocation>();
-        for(Object o : this.getResources(ResourceType.VDC)) {
+    public Set<FlexiantLocation> getLocations() throws FlexiantException {
+        Set<FlexiantLocation> locations = new HashSet<FlexiantLocation>();
+        for (Object o : this.getResources(ResourceType.VDC)) {
             locations.add(FlexiantLocation.from((Vdc) o, (Cluster) this.getResource(((Vdc) o).getClusterUUID(), ResourceType.CLUSTER)));
         }
-        for(Object o : this.getResources(ResourceType.CLUSTER)) {
+        for (Object o : this.getResources(ResourceType.CLUSTER)) {
             locations.add(FlexiantLocation.from((Cluster) o));
         }
         return locations;
@@ -101,9 +121,10 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * query loops through all servers, finding the ip.
      *
      * @param ip the ip of the server.
-     * @return the server having the given ip.
+     * @return the server having the given ip, or null if not found
      * @throws FlexiantException
      */
+    @Nullable
     public FlexiantServer getServerByIp(String ip) throws FlexiantException {
         return this.searchByIp(this.getServers(), ip);
     }
@@ -116,10 +137,11 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      *
      * @param ip     the ip of the server.
      * @param filter prefix to filter list of servers
-     * @return the server with having the given ip
+     * @return the server with having the given ip, or null if not found.
      * @throws FlexiantException
      * @see FlexiantComputeClient#getServerByIp(String)
      */
+    @Nullable
     public FlexiantServer getServerByIp(String ip, String filter) throws FlexiantException {
         return this.searchByIp(this.getServers(filter), ip);
     }
@@ -131,9 +153,14 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      * @param ip      ip to search for.
      * @return the server matching the ip or null
      */
-    protected FlexiantServer searchByIp(List<FlexiantServer> servers, String ip) {
+    @Nullable
+    protected FlexiantServer searchByIp(Set<FlexiantServer> servers, String ip) {
+
         for (FlexiantServer server : servers) {
-            if (server.getPublicIpAddress().equals(ip) || server.getPrivateIpAddress().equals(ip)) {
+            if (server.getPublicIpAddress() != null && server.getPublicIpAddress().equals(ip)) {
+                return server;
+            }
+            if (server.getPrivateIpAddress() != null && server.getPrivateIpAddress().equals(ip)) {
                 return server;
             }
         }
@@ -358,11 +385,11 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
     public FlexiantLocation getLocation(final String locationUUID) throws FlexiantException {
 
         final Cluster cluster = this.getCluster(locationUUID);
-        if(cluster != null) {
+        if (cluster != null) {
             return FlexiantLocation.from(cluster);
         }
         final Vdc vdc = this.getVdc(locationUUID);
-        if(vdc != null) {
+        if (vdc != null) {
             return FlexiantLocation.from(vdc, cluster);
         }
         return null;
@@ -373,7 +400,6 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      *
      * @param clusterUUID the uuid of the cluster.
      * @return the cluster identified by the uuid or null.
-     *
      * @throws FlexiantException
      */
     @Nullable
@@ -386,7 +412,6 @@ public class FlexiantComputeClient extends FlexiantBaseClient {
      *
      * @param vdcUUID the uuid of the vdc.
      * @return the vdc identified by the uuid or null.
-     *
      * @throws FlexiantException
      */
     @Nullable

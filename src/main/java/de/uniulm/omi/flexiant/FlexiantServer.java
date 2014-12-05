@@ -16,11 +16,7 @@
 
 package de.uniulm.omi.flexiant;
 
-import de.uniulm.omi.flexiant.extility.Ip;
-import de.uniulm.omi.flexiant.extility.IpType;
-import de.uniulm.omi.flexiant.extility.NetworkType;
-import de.uniulm.omi.flexiant.extility.Nic;
-import de.uniulm.omi.flexiant.extility.Server;
+import de.uniulm.omi.flexiant.extility.*;
 
 import javax.annotation.Nullable;
 
@@ -32,22 +28,20 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @see de.uniulm.omi.flexiant.extility.Server
  */
-public class FlexiantServer {
+public class FlexiantServer extends AbstractFlexiantResource {
 
-	private final Server server;
-	
-	public FlexiantServer(final Server server) {
-		checkNotNull(server);
-		this.server = server;
-	}
-	
-	public String getId() {
-		return server.getResourceUUID();
-	}
+    public FlexiantServer(final Server server) {
+        super(server);
+        checkNotNull(server);
+    }
 
-	@Nullable
+    protected Server getServer() {
+        return (Server) this.resource;
+    }
+
+    @Nullable
     public String getPublicIpAddress() {
-    	for (final Nic nic : this.server.getNics()) {
+        for (final Nic nic : this.getServer().getNics()) {
             if (nic.getNetworkType().equals(NetworkType.IP)) {
                 for (final Ip ip : nic.getIpAddresses()) {
                     if (ip.getType().equals(IpType.IPV_4)) {
@@ -56,18 +50,21 @@ public class FlexiantServer {
                 }
             }
         }
-    	return null;
+        return null;
     }
 
+    @Nullable
     public String getPrivateIpAddress() {
         return this.getPublicIpAddress();
     }
 
-	public String getInitialUser() {
-		return this.server.getInitialUser();
-	}
+    @Nullable
+    public String getInitialUser() {
+        return this.getServer().getInitialUser();
+    }
 
-	public String getInitialPassword() {
-		return this.server.getInitialPassword();
-	}
+    @Nullable
+    public String getInitialPassword() {
+        return this.getServer().getInitialPassword();
+    }
 }

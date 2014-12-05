@@ -2,26 +2,24 @@ package de.uniulm.omi.flexiant;
 
 import de.uniulm.omi.flexiant.extility.Image;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import javax.annotation.Nullable;
 
-public class FlexiantImage {
-	
-	private final Image image;
-	
-	public FlexiantImage(final Image image) {
-		checkNotNull(image);
-		this.image = image;
-	}
+public class FlexiantImage extends AbstractFlexiantResource {
 
-	public String getId() {
-		return image.getResourceUUID();
-	}
-	
-	public String getDefaultUser() {
-		return image.getDefaultUser();
-	}
-	
-	public boolean isGenPassword() {
-		return image.isGenPassword();
-	}
+    public FlexiantImage(final Image image) {
+        super(image);
+    }
+
+    protected Image getImage() {
+        return (Image) this.resource;
+    }
+
+    @Nullable
+    public String getDefaultUser() {
+        return getImage().getDefaultUser();
+    }
+
+    public boolean isGenPassword() {
+        return getImage().isGenPassword();
+    }
 }

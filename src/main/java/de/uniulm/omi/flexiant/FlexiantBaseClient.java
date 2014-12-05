@@ -25,6 +25,9 @@ import javax.xml.ws.BindingProvider;
 import de.uniulm.omi.flexiant.extility.UserAPI;
 import de.uniulm.omi.flexiant.extility.UserService;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Base client for creating a connection to
  * the flexiant extility api.
@@ -45,6 +48,13 @@ public class FlexiantBaseClient {
      * @param password Password for authentication
      */
     public FlexiantBaseClient(String endpoint, String apiUserName, String password) {
+
+        checkNotNull(endpoint);
+        checkNotNull(apiUserName);
+        checkNotNull(password);
+        checkArgument(!endpoint.isEmpty());
+        checkArgument(!apiUserName.isEmpty());
+        checkArgument(!password.isEmpty());
 
         this.customerUUID = apiUserName.split("/")[0];
 
