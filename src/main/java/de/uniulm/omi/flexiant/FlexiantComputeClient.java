@@ -23,9 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Client for calling compute operations on flexiants extility api.
  */
@@ -112,6 +109,20 @@ public class FlexiantComputeClient {
             locations.add(FlexiantLocation.from((Cluster) o));
         }
         return locations;
+    }
+
+    /**
+     * Returns all hardware.
+     *
+     * @return all hardware.
+     * @throws FlexiantException
+     */
+    public Set<FlexiantHardware> getHardwareFlavors() throws FlexiantException {
+        Set<FlexiantHardware> hardware = new HashSet<FlexiantHardware>();
+        for (Object o : this.getResources(ResourceType.PRODUCTOFFER)) {
+            hardware.add(new FlexiantHardware((ProductOffer) o));
+        }
+        return hardware;
     }
 
     /**
