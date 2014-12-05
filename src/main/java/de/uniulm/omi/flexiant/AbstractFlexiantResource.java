@@ -22,6 +22,11 @@ public abstract class AbstractFlexiantResource implements FlexiantResource {
     }
 
     @Override
+    public String getName() {
+        return this.resource.getResourceName();
+    }
+
+    @Override
     public int hashCode() {
         return this.getId().hashCode();
     }

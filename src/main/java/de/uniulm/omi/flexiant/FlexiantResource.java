@@ -7,4 +7,6 @@ public interface FlexiantResource {
 
     public String getId();
 
+    public String getName();
+
 }

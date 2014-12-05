@@ -4,7 +4,7 @@
 
 	<groupId>de.uniulm.omi.flexiant</groupId>
 	<artifactId>flexiant-client</artifactId>
-	<version>1.2-RELEASE</version>
+	<version>1.2.2-RELEASE</version>
 	<packaging>jar</packaging>
 
 	<name>flexiant-client</name>
