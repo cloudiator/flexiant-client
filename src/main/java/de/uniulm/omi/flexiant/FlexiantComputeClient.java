@@ -391,7 +391,8 @@ public class FlexiantComputeClient {
         if (productOffer == null) {
             return null;
         }
-        return new FlexiantHardware(productOffer);
+        return null;
+        //return new FlexiantHardware(productOffer);
     }
 
     /**
