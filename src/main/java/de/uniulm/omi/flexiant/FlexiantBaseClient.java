@@ -58,6 +58,9 @@ public class FlexiantBaseClient {
 
         this.customerUUID = apiUserName.split("/")[0];
 
+        // disable sni name checking
+        System.setProperty ("jsse.enableSNIExtension", "false");
+
         // Get the service WSDL from the client jar
         URL url;
         try {
