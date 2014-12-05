@@ -120,7 +120,16 @@ public class FlexiantComputeClient {
     public Set<FlexiantHardware> getHardwareFlavors() throws FlexiantException {
         Set<FlexiantHardware> hardware = new HashSet<FlexiantHardware>();
         for (Object o : this.getResources(ResourceType.PRODUCTOFFER)) {
-            hardware.add(new FlexiantHardware((ProductOffer) o));
+
+            ProductOffer productOffer = (ProductOffer) o;
+
+            for(ProductComponent productComponent : productOffer.getComponentConfig()) {
+                for(Value value : productComponent.getProductConfiguredValues()) {
+                    System.out.println(value.getKey());
+                    System.out.println(value.getDescription());
+                }
+            }
+            //hardware.add(new FlexiantHardware((ProductOffer) o));
         }
         return hardware;
     }
