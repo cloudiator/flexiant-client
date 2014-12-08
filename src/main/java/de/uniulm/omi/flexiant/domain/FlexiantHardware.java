@@ -36,11 +36,11 @@ public class FlexiantHardware implements FlexiantResource {
             for (ProductComponent productComponent : productOffer.getComponentConfig()) {
                 for (Value value : productComponent.getProductConfiguredValues()) {
 
-                    if (value.getKey().equals(DISK_KEY)) {
+                    if (value.getKey().equals(DISK_KEY) && value.getValue() != null) {
                         diskOffers.add(productOffer);
                     }
 
-                    if (value.getKey().equals(RAM_KEY) || value.getKey().equals(CPU_KEY)) {
+                    if ((value.getKey().equals(RAM_KEY) || value.getKey().equals(CPU_KEY)) && value.getValue() != null) {
                         machineOffers.add(productOffer);
                     }
                 }
