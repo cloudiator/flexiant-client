@@ -29,6 +29,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Client for calling compute operations on flexiants extility api.
  */
@@ -125,19 +128,10 @@ public class FlexiantComputeClient {
      */
     public Set<FlexiantHardware> getHardwareFlavors() throws FlexiantException {
         Set<FlexiantHardware> hardware = new HashSet<FlexiantHardware>();
-        for (Object o : this.getResources(ResourceType.PRODUCTOFFER)) {
 
-            ProductOffer productOffer = (ProductOffer) o;
 
-            for (ProductComponent productComponent : productOffer.getComponentConfig()) {
-                for (Value value : productComponent.getProductConfiguredValues()) {
-                    System.out.println(value.getKey());
-                    System.out.println(value.getDescription());
-                }
-            }
-            //hardware.add(new FlexiantHardware((ProductOffer) o));
-        }
-        return hardware;
+        //noinspection unchecked
+        return FlexiantHardware.from((List<ProductOffer>) this.getResources(ResourceType.PRODUCTOFFER));
     }
 
     /**
@@ -393,12 +387,21 @@ public class FlexiantComputeClient {
      */
     @Nullable
     public FlexiantHardware getHardware(final String hardwareUUID) throws FlexiantException {
-        final ProductOffer productOffer = (ProductOffer) this.getResource(hardwareUUID, ResourceType.PRODUCTOFFER);
-        if (productOffer == null) {
+
+        checkNotNull(hardwareUUID);
+
+        String[] parts = hardwareUUID.split(":");
+
+        checkArgument(parts.length == 2, "Expected hardwareUUID to contain :");
+
+        final ProductOffer machineOffer = (ProductOffer) this.getResource(parts[0], ResourceType.PRODUCTOFFER);
+        final ProductOffer diskOffer = (ProductOffer) this.getResource(parts[1], ResourceType.PRODUCTOFFER);
+
+
+        if (machineOffer == null || diskOffer == null) {
             return null;
         }
-        return null;
-        //return new FlexiantHardware(productOffer);
+        return FlexiantHardware.from(machineOffer, diskOffer);
     }
 
     /**
