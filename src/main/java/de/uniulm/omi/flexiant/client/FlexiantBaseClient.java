@@ -95,7 +95,7 @@ public class FlexiantBaseClient {
      *
      * @return The service for calling operations on the webservice.
      */
-    protected UserService getService() {
+    public UserService getService() {
         return this.service;
     }
 
@@ -104,7 +104,7 @@ public class FlexiantBaseClient {
      *
      * @return the customer uuid.
      */
-    protected String getCustomerUUID() {
+    public String getCustomerUUID() {
         return this.customerUUID;
     }
 
