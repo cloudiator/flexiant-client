@@ -1,4 +1,4 @@
-package de.uniulm.omi.flexiant;
+package de.uniulm.omi.flexiant.domain;
 
 import de.uniulm.omi.flexiant.extility.Cluster;
 import de.uniulm.omi.flexiant.extility.Vdc;
@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class FlexiantLocation extends AbstractFlexiantResource{
+public class FlexiantLocation extends AbstractFlexiantResource {
 
 	@Nullable
 	private final FlexiantLocation parent;

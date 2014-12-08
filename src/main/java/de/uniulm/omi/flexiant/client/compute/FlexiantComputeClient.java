@@ -14,8 +14,14 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant;
+package de.uniulm.omi.flexiant.client.compute;
 
+import de.uniulm.omi.flexiant.client.FlexiantBaseClient;
+import de.uniulm.omi.flexiant.client.api.FlexiantException;
+import de.uniulm.omi.flexiant.domain.FlexiantHardware;
+import de.uniulm.omi.flexiant.domain.FlexiantImage;
+import de.uniulm.omi.flexiant.domain.FlexiantLocation;
+import de.uniulm.omi.flexiant.domain.FlexiantServer;
 import de.uniulm.omi.flexiant.extility.*;
 
 import javax.annotation.Nullable;
@@ -31,7 +37,7 @@ public class FlexiantComputeClient {
     private final FlexiantBaseClient flexiantBaseClient;
 
     /**
-     * @see de.uniulm.omi.flexiant.FlexiantComputeClient#FlexiantComputeClient(String, String, String)
+     * @see FlexiantComputeClient#FlexiantComputeClient(String, String, String)
      */
     public FlexiantComputeClient(final String endpoint, final String apiUserName, final String password) {
         flexiantBaseClient = new FlexiantBaseClient(endpoint, apiUserName, password);
@@ -56,7 +62,7 @@ public class FlexiantComputeClient {
      *
      * @param prefix the prefix the server names should match.
      * @return a list of servers matching the prefix
-     * @throws FlexiantException
+     * @throws de.uniulm.omi.flexiant.client.api.FlexiantException
      */
     public Set<FlexiantServer> getServers(final String prefix) throws FlexiantException {
         Set<FlexiantServer> servers = new HashSet<FlexiantServer>();
@@ -123,8 +129,8 @@ public class FlexiantComputeClient {
 
             ProductOffer productOffer = (ProductOffer) o;
 
-            for(ProductComponent productComponent : productOffer.getComponentConfig()) {
-                for(Value value : productComponent.getProductConfiguredValues()) {
+            for (ProductComponent productComponent : productOffer.getComponentConfig()) {
+                for (Value value : productComponent.getProductConfiguredValues()) {
                     System.out.println(value.getKey());
                     System.out.println(value.getDescription());
                 }
@@ -242,7 +248,7 @@ public class FlexiantComputeClient {
      *
      * @param server the server to start.
      * @throws FlexiantException
-     * @see de.uniulm.omi.flexiant.FlexiantComputeClient#startServer(String)
+     * @see FlexiantComputeClient#startServer(String)
      */
     public void startServer(FlexiantServer server) throws FlexiantException {
         if (server == null) {
@@ -267,7 +273,7 @@ public class FlexiantComputeClient {
      *
      * @param server the server to stop.
      * @throws FlexiantException
-     * @see de.uniulm.omi.flexiant.FlexiantComputeClient#stopServer(String)
+     * @see FlexiantComputeClient#stopServer(String)
      */
     public void stopServer(FlexiantServer server) throws FlexiantException {
         if (server == null) {
@@ -411,7 +417,7 @@ public class FlexiantComputeClient {
         }
         final Vdc vdc = this.getVdc(locationUUID);
         if (vdc != null) {
-            return FlexiantLocation.from(vdc, cluster);
+            return FlexiantLocation.from(vdc, this.getCluster(vdc.getClusterUUID()));
         }
         return null;
     }

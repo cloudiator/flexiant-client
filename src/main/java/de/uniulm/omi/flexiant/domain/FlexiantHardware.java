@@ -1,4 +1,4 @@
-package de.uniulm.omi.flexiant;
+package de.uniulm.omi.flexiant.domain;
 
 import de.uniulm.omi.flexiant.extility.ProductOffer;
 

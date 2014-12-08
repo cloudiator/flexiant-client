@@ -1,4 +1,4 @@
-package de.uniulm.omi.flexiant;
+package de.uniulm.omi.flexiant.domain;
 
 /**
  * Created by daniel on 05.12.14.

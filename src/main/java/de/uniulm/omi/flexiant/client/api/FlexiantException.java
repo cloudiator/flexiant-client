@@ -14,7 +14,7 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant;
+package de.uniulm.omi.flexiant.client.api;
 
 /**
  * An exception class wrapping exceptions which occur during the communication with the

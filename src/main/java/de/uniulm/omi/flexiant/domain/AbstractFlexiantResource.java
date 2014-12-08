@@ -1,5 +1,6 @@
-package de.uniulm.omi.flexiant;
+package de.uniulm.omi.flexiant.domain;
 
+import de.uniulm.omi.flexiant.domain.FlexiantResource;
 import de.uniulm.omi.flexiant.extility.Resource;
 
 import static com.google.common.base.Preconditions.checkNotNull;

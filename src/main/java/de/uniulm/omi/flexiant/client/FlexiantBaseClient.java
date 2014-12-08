@@ -14,7 +14,7 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant;
+package de.uniulm.omi.flexiant.client;
 
 import java.net.MalformedURLException;
 import java.net.URL;
