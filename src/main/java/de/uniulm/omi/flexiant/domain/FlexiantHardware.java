@@ -64,7 +64,8 @@ public class FlexiantHardware implements FlexiantResource {
 
         checkArgument(this.searchForValueInProductOffer(CPU_KEY, machine) != null, "Machine Offer does not contain cpu key.");
         checkArgument(this.searchForValueInProductOffer(RAM_KEY, machine) != null, "Machine Offer does not contain ram key.");
-        checkArgument(this.searchForValueInProductOffer(RAM_KEY, machine) != null, "Machine Offer does not contain ram key.");
+
+        checkArgument(this.searchForValueInProductOffer(DISK_KEY, disk) != null, "Disk Offer does not contain disk key.");
 
         this.machine = machine;
         this.disk = disk;
@@ -116,7 +117,7 @@ public class FlexiantHardware implements FlexiantResource {
 
         for (ProductComponent productComponent : productOffer.getComponentConfig()) {
             for (Value value : productComponent.getProductConfiguredValues()) {
-                if (value.getKey().equals(CPU_KEY)) {
+                if (value.getKey().equals(key)) {
                     return value.getValue();
                 }
             }
