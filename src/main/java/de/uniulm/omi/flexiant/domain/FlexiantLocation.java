@@ -9,31 +9,40 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FlexiantLocation extends AbstractFlexiantResource {
 
-	@Nullable
-	private final FlexiantLocation parent;
+    private final FlexiantLocationScope locationScope;
 
-	public static FlexiantLocation from(Cluster cluster) {
-		return new FlexiantLocation(cluster);
-	}
+    @Nullable
+    private final FlexiantLocation parent;
 
-	public static FlexiantLocation from(Vdc vdc, Cluster cluster) {
-		return new FlexiantLocation(vdc, cluster);
-	}
+    public static FlexiantLocation from(Cluster cluster) {
+        checkNotNull(cluster);
+        return new FlexiantLocation(cluster);
+    }
 
-	private FlexiantLocation(final Vdc vdc, final Cluster cluster) {
-		super(vdc);
-		checkNotNull(cluster);
-		this.parent = FlexiantLocation.from(cluster);
-	}
+    public static FlexiantLocation from(Vdc vdc, Cluster cluster) {
+        checkNotNull(vdc);
+        checkNotNull(cluster);
+        return new FlexiantLocation(vdc, cluster);
+    }
 
-	private FlexiantLocation(final Cluster cluster) {
-		super(cluster);
-		this.parent = null;
-	}
+    private FlexiantLocation(final Vdc vdc, final Cluster cluster) {
+        super(vdc);
+        this.locationScope = FlexiantLocationScope.VDC;
+        this.parent = FlexiantLocation.from(cluster);
+    }
 
-	@Nullable
-	public FlexiantLocation getParent() {
-		return this.parent;
-	}
+    private FlexiantLocation(final Cluster cluster) {
+        super(cluster);
+        this.locationScope = FlexiantLocationScope.CLUSTER;
+        this.parent = null;
+    }
 
+    @Nullable
+    public FlexiantLocation getParent() {
+        return this.parent;
+    }
+
+    public FlexiantLocationScope getLocationScope() {
+        return locationScope;
+    }
 }

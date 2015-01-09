@@ -18,10 +18,7 @@ package de.uniulm.omi.flexiant.client.compute;
 
 import de.uniulm.omi.flexiant.client.FlexiantBaseClient;
 import de.uniulm.omi.flexiant.client.api.FlexiantException;
-import de.uniulm.omi.flexiant.domain.FlexiantHardware;
-import de.uniulm.omi.flexiant.domain.FlexiantImage;
-import de.uniulm.omi.flexiant.domain.FlexiantLocation;
-import de.uniulm.omi.flexiant.domain.FlexiantServer;
+import de.uniulm.omi.flexiant.domain.*;
 import de.uniulm.omi.flexiant.extility.*;
 
 import javax.annotation.Nullable;
@@ -190,31 +187,29 @@ public class FlexiantComputeClient {
     /**
      * Creates a server with the given properties.
      *
-     * @param serverName         name of the server.
-     * @param serverProductOffer the product offer to use.
-     * @param diskProductOffer   the product offer to use for the disk.
-     * @param vdc                the virtual data center in which the server is created.
-     * @param network            the network the node will be attached.
-     * @param image              the os image to use for the server.
+     * @param flexiantServerTemplate A template describing the server which should be started.
      * @return the created server.
      * @throws FlexiantException
      */
-    public FlexiantServer createServer(String serverName, String serverProductOffer, String diskProductOffer, String vdc, String network, String image) throws FlexiantException {
+    public FlexiantServer createServer(final FlexiantServerTemplate flexiantServerTemplate) throws FlexiantException {
+
+        checkNotNull(flexiantServerTemplate);
+
         Server server = new Server();
-        server.setResourceName(serverName);
+        server.setResourceName(flexiantServerTemplate.getServerName());
         server.setCustomerUUID(this.getCustomerUUID());
-        server.setProductOfferUUID(serverProductOffer);
-        server.setVdcUUID(vdc);
-        server.setImageUUID(image);
+        server.setProductOfferUUID(flexiantServerTemplate.getServerProductOffer());
+        server.setVdcUUID(flexiantServerTemplate.getVdc());
+        server.setImageUUID(flexiantServerTemplate.getImage());
 
         Disk disk = new Disk();
-        disk.setProductOfferUUID(diskProductOffer);
+        disk.setProductOfferUUID(flexiantServerTemplate.getDiskProductOffer());
         disk.setIndex(0);
 
         server.getDisks().add(disk);
 
         Nic nic = new Nic();
-        nic.setNetworkUUID(network);
+        nic.setNetworkUUID(flexiantServerTemplate.getNetwork());
 
         server.getNics().add(nic);
 
