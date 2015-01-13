@@ -1,5 +1,6 @@
-package de.uniulm.omi.flexiant.domain;
+package de.uniulm.omi.flexiant.domain.impl;
 
+import de.uniulm.omi.flexiant.domain.api.Resource;
 import de.uniulm.omi.flexiant.extility.ProductComponent;
 import de.uniulm.omi.flexiant.extility.ProductOffer;
 import de.uniulm.omi.flexiant.extility.Value;
@@ -11,7 +12,7 @@ import java.util.Set;
 
 import static com.google.common.base.Preconditions.*;
 
-public class FlexiantHardware implements FlexiantResource {
+public class Hardware implements Resource {
 
     private static final String DISK_KEY = "size";
     private static final String RAM_KEY = "ram";
@@ -20,11 +21,11 @@ public class FlexiantHardware implements FlexiantResource {
     private final ProductOffer disk;
     private final ProductOffer machine;
 
-    public static FlexiantHardware from(final ProductOffer machine, final ProductOffer disk) {
-        return new FlexiantHardware(machine, disk);
+    public static Hardware from(final ProductOffer machine, final ProductOffer disk) {
+        return new Hardware(machine, disk);
     }
 
-    public static Set<FlexiantHardware> from(final List<ProductOffer> offers) {
+    public static Set<Hardware> from(final List<ProductOffer> offers) {
 
         checkNotNull(offers);
 
@@ -47,17 +48,17 @@ public class FlexiantHardware implements FlexiantResource {
             }
         }
 
-        Set<FlexiantHardware> hardware = new HashSet<FlexiantHardware>();
+        Set<Hardware> hardware = new HashSet<Hardware>();
         for (ProductOffer machineOffer : machineOffers) {
             for (ProductOffer diskOffer : diskOffers) {
-                hardware.add(FlexiantHardware.from(machineOffer, diskOffer));
+                hardware.add(Hardware.from(machineOffer, diskOffer));
             }
         }
 
         return hardware;
     }
 
-    private FlexiantHardware(final ProductOffer machine, final ProductOffer disk) {
+    private Hardware(final ProductOffer machine, final ProductOffer disk) {
 
         checkNotNull(machine);
         checkNotNull(disk);
@@ -78,7 +79,7 @@ public class FlexiantHardware implements FlexiantResource {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof FlexiantHardware && ((FlexiantHardware) obj).getId().equals(this.getId());
+        return obj instanceof Hardware && ((Hardware) obj).getId().equals(this.getId());
     }
 
     @Override
@@ -124,5 +125,4 @@ public class FlexiantHardware implements FlexiantResource {
         }
         return null;
     }
-
 }

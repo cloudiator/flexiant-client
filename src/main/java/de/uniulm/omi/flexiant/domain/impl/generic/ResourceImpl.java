@@ -1,17 +1,17 @@
-package de.uniulm.omi.flexiant.domain;
+package de.uniulm.omi.flexiant.domain.impl.generic;
 
-import de.uniulm.omi.flexiant.extility.Resource;
+import de.uniulm.omi.flexiant.domain.api.Resource;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by daniel on 05.12.14.
  */
-public abstract class AbstractFlexiantResource implements FlexiantResource {
+public abstract class ResourceImpl implements Resource {
 
-    protected final Resource resource;
+    protected final de.uniulm.omi.flexiant.extility.Resource resource;
 
-    public AbstractFlexiantResource(Resource resource) {
+    public ResourceImpl(de.uniulm.omi.flexiant.extility.Resource resource) {
         checkNotNull(resource);
         this.resource = resource;
     }
@@ -33,7 +33,7 @@ public abstract class AbstractFlexiantResource implements FlexiantResource {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof FlexiantResource && this.getId().equals(((FlexiantResource) obj).getId());
+        return obj instanceof Resource && this.getId().equals(((Resource) obj).getId());
     }
 
     @Override

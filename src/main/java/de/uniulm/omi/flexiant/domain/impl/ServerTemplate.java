@@ -1,4 +1,4 @@
-package de.uniulm.omi.flexiant.domain;
+package de.uniulm.omi.flexiant.domain.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -8,9 +8,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p/>
  * To create a new instance, use the builder.
  *
- * @see de.uniulm.omi.flexiant.domain.FlexiantServerTemplate.FlexiantServerTemplateBuilder
+ * @see ServerTemplate.FlexiantServerTemplateBuilder
  */
-public class FlexiantServerTemplate {
+public class ServerTemplate {
 
     private final String serverName;
     private final String serverProductOffer;
@@ -19,7 +19,7 @@ public class FlexiantServerTemplate {
     private final String image;
     private final TemplateOptions templateOptions;
 
-    private FlexiantServerTemplate(
+    private ServerTemplate(
             final String serverName,
             final String serverProductOffer,
             final String diskProductOffer,
@@ -93,7 +93,7 @@ public class FlexiantServerTemplate {
     /**
      * Builder for the flexiant server template.
      *
-     * @see de.uniulm.omi.flexiant.domain.FlexiantServerTemplate
+     * @see ServerTemplate
      */
     public static class FlexiantServerTemplateBuilder {
 
@@ -129,7 +129,7 @@ public class FlexiantServerTemplate {
          *
          * @param serverProductOffer id of the server product offer.
          * @return fluent interface
-         * @see de.uniulm.omi.flexiant.domain.FlexiantServerTemplate.FlexiantServerTemplateBuilder#hardware(FlexiantHardware)
+         * @see ServerTemplate.FlexiantServerTemplateBuilder#hardware(Hardware)
          */
         public FlexiantServerTemplateBuilder serverProductOffer(final String serverProductOffer) {
             this.serverProductOffer = serverProductOffer;
@@ -141,7 +141,7 @@ public class FlexiantServerTemplate {
          *
          * @param diskProductOffer id of the disk product offer.
          * @return fluent interface
-         * @see de.uniulm.omi.flexiant.domain.FlexiantServerTemplate.FlexiantServerTemplateBuilder#hardware(FlexiantHardware)
+         * @see ServerTemplate.FlexiantServerTemplateBuilder#hardware(Hardware)
          */
         public FlexiantServerTemplateBuilder diskProductOffer(final String diskProductOffer) {
             this.diskProductOffer = diskProductOffer;
@@ -153,10 +153,10 @@ public class FlexiantServerTemplate {
          *
          * @param hardware a hardware object used for server and disk offer.
          * @return fluent interface
-         * @see de.uniulm.omi.flexiant.domain.FlexiantServerTemplate.FlexiantServerTemplateBuilder#serverProductOffer(String)
-         * @see de.uniulm.omi.flexiant.domain.FlexiantServerTemplate.FlexiantServerTemplateBuilder#diskProductOffer(String)
+         * @see ServerTemplate.FlexiantServerTemplateBuilder#serverProductOffer(String)
+         * @see ServerTemplate.FlexiantServerTemplateBuilder#diskProductOffer(String)
          */
-        public FlexiantServerTemplateBuilder hardware(final FlexiantHardware hardware) {
+        public FlexiantServerTemplateBuilder hardware(final Hardware hardware) {
             checkNotNull(hardware);
             final String[] ids = hardware.getId().split(":");
             checkArgument(ids.length == 2);
@@ -165,14 +165,14 @@ public class FlexiantServerTemplate {
             return this;
         }
 
-        public FlexiantServerTemplateBuilder image(final FlexiantImage image) {
+        public FlexiantServerTemplateBuilder image(final Image image) {
             this.image = image.getId();
             return this;
         }
 
-        public FlexiantServerTemplateBuilder location(final FlexiantLocation flexiantLocation) {
+        public FlexiantServerTemplateBuilder location(final Location flexiantLocation) {
             checkNotNull(flexiantLocation);
-            checkArgument(flexiantLocation.getLocationScope() == FlexiantLocationScope.VDC);
+            checkArgument(flexiantLocation.getLocationScope() == LocationScope.VDC);
             this.vdc = flexiantLocation.getId();
             return this;
         }
@@ -192,8 +192,8 @@ public class FlexiantServerTemplate {
             return this;
         }
 
-        public FlexiantServerTemplate build() {
-            return new FlexiantServerTemplate(
+        public ServerTemplate build() {
+            return new ServerTemplate(
                     this.serverName,
                     this.serverProductOffer,
                     this.diskProductOffer,

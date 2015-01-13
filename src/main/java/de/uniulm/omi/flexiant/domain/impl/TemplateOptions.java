@@ -1,4 +1,4 @@
-package de.uniulm.omi.flexiant.domain;
+package de.uniulm.omi.flexiant.domain.impl;
 
 import java.util.HashSet;
 import java.util.Set;

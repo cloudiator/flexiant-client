@@ -14,9 +14,13 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.domain;
+package de.uniulm.omi.flexiant.domain.impl;
 
-import de.uniulm.omi.flexiant.extility.*;
+import de.uniulm.omi.flexiant.domain.impl.generic.ResourceInLocationImpl;
+import de.uniulm.omi.flexiant.extility.Ip;
+import de.uniulm.omi.flexiant.extility.IpType;
+import de.uniulm.omi.flexiant.extility.NetworkType;
+import de.uniulm.omi.flexiant.extility.Nic;
 
 import javax.annotation.Nullable;
 
@@ -28,15 +32,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @see de.uniulm.omi.flexiant.extility.Server
  */
-public class FlexiantServer extends AbstractFlexiantResource {
+public class Server extends ResourceInLocationImpl {
 
-    public FlexiantServer(final Server server) {
+    public Server(final de.uniulm.omi.flexiant.extility.Server server) {
         super(server);
         checkNotNull(server);
     }
 
-    protected Server getServer() {
-        return (Server) this.resource;
+    protected de.uniulm.omi.flexiant.extility.Server getServer() {
+        return (de.uniulm.omi.flexiant.extility.Server) this.resource;
     }
 
     @Nullable

@@ -1,9 +1,9 @@
-package de.uniulm.omi.flexiant.domain;
+package de.uniulm.omi.flexiant.domain.api;
 
 /**
  * Created by daniel on 05.12.14.
  */
-public interface FlexiantResource {
+public interface Resource {
 
     public String getId();
 
