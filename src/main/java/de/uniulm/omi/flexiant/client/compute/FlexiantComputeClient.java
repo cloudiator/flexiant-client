@@ -124,11 +124,24 @@ public class FlexiantComputeClient {
      * @throws FlexiantException
      */
     public Set<FlexiantHardware> getHardwareFlavors() throws FlexiantException {
-        Set<FlexiantHardware> hardware = new HashSet<FlexiantHardware>();
-
-
         //noinspection unchecked
         return FlexiantHardware.from((List<ProductOffer>) this.getResources(ResourceType.PRODUCTOFFER));
+    }
+
+    /**
+     * Returns all networks.
+     *
+     * @return a set of all networks.
+     * @throws FlexiantException
+     */
+    public Set<FlexiantNetwork> getNetworks() throws FlexiantException {
+        final Set<FlexiantNetwork> networks = new HashSet<FlexiantNetwork>();
+
+        for (final Object o : this.getResources(ResourceType.NETWORK)) {
+            networks.add(new FlexiantNetwork((Network) o));
+        }
+
+        return networks;
     }
 
     /**
@@ -205,13 +218,26 @@ public class FlexiantComputeClient {
         Disk disk = new Disk();
         disk.setProductOfferUUID(flexiantServerTemplate.getDiskProductOffer());
         disk.setIndex(0);
-
         server.getDisks().add(disk);
 
-        Nic nic = new Nic();
-        nic.setNetworkUUID(flexiantServerTemplate.getNetwork());
+        final Set<String> networks = new HashSet<String>();
+        if (flexiantServerTemplate.getTemplateOptions().getNetworks().isEmpty()) {
+            //no network configured, find it out by ourselves.
+            if (this.getNetworks().size() == 1) {
+                networks.add(this.getNetworks().iterator().next().getId());
+            } else {
+                throw new FlexiantException("Could not uniquely identify network.");
+            }
+        } else {
+            networks.addAll(flexiantServerTemplate.getTemplateOptions().getNetworks());
+        }
 
-        server.getNics().add(nic);
+        //assign the networks
+        for (String network : networks) {
+            Nic nic = new Nic();
+            nic.setNetworkUUID(network);
+            server.getNics().add(nic);
+        }
 
         try {
             Job serverJob = this.getService().createServer(server, null, null);
@@ -445,7 +471,7 @@ public class FlexiantComputeClient {
     }
 
     /**
-     * Retrieves a ressource from the flexiant api, which is identified by the given resource UUID.
+     * Retrieves a resource from the flexiant api, which is identified by the given resource UUID.
      *
      * @param resourceUUID the uuid of the resource.
      * @param type         the type of the resource.
@@ -472,20 +498,20 @@ public class FlexiantComputeClient {
      * This method is required if the desired resource is location dependant, and you want to ensure the resource exists at
      * the required location.
      *
-     * @param ressourceUUID the uuid of the resource.
-     * @param locationUUID  the uuid of the location.
-     * @param type          the type of the resource.
+     * @param resourceUUID the uuid of the resource.
+     * @param locationUUID the uuid of the location.
+     * @param type         the type of the resource.
      * @return the resource if found, null if not.
      * @throws FlexiantException if multiple resources where found or an error occurred during the call to the api.
      */
     @Nullable
-    protected Object getResource(final String ressourceUUID, final String locationUUID, final ResourceType type) throws FlexiantException {
+    protected Object getResource(final String resourceUUID, final String locationUUID, final ResourceType type) throws FlexiantException {
         SearchFilter sf = new SearchFilter();
         FilterCondition fcResource = new FilterCondition();
 
         fcResource.setCondition(Condition.IS_EQUAL_TO);
         fcResource.setField("resourceUUID");
-        fcResource.getValue().add(ressourceUUID);
+        fcResource.getValue().add(resourceUUID);
         sf.getFilterConditions().add(fcResource);
 
         FilterCondition fcLocation = new FilterCondition();

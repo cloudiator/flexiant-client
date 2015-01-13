@@ -16,16 +16,16 @@ public class FlexiantServerTemplate {
     private final String serverProductOffer;
     private final String diskProductOffer;
     private final String vdc;
-    private final String network;
     private final String image;
+    private final TemplateOptions templateOptions;
 
     private FlexiantServerTemplate(
             final String serverName,
             final String serverProductOffer,
             final String diskProductOffer,
             final String vdc,
-            final String network,
-            final String image) {
+            final String image,
+            final TemplateOptions templateOptions) {
 
         checkNotNull(serverName);
         checkArgument(!serverName.isEmpty());
@@ -35,17 +35,17 @@ public class FlexiantServerTemplate {
         checkArgument(!diskProductOffer.isEmpty());
         checkNotNull(vdc);
         checkArgument(!vdc.isEmpty());
-        checkNotNull(network);
-        checkArgument(!network.isEmpty());
         checkNotNull(image);
         checkArgument(!image.isEmpty());
+        checkNotNull(templateOptions);
 
         this.serverName = serverName;
         this.serverProductOffer = serverProductOffer;
         this.diskProductOffer = diskProductOffer;
         this.vdc = vdc;
-        this.network = network;
         this.image = image;
+        this.templateOptions = templateOptions;
+
     }
 
     /**
@@ -77,17 +77,17 @@ public class FlexiantServerTemplate {
     }
 
     /**
-     * @return the network the server will be attached to.
-     */
-    public String getNetwork() {
-        return network;
-    }
-
-    /**
      * @return the image that will be used to start the server.
      */
     public String getImage() {
         return image;
+    }
+
+    /**
+     * @return the template options used for starting the server.
+     */
+    public TemplateOptions getTemplateOptions() {
+        return templateOptions;
     }
 
     /**
@@ -101,8 +101,17 @@ public class FlexiantServerTemplate {
         private String serverProductOffer;
         private String diskProductOffer;
         private String vdc;
-        private String network;
         private String image;
+        private TemplateOptions templateOptions;
+
+        /**
+         * No-args constructor.
+         * <p/>
+         * Initializes template options with a default value.
+         */
+        public FlexiantServerTemplateBuilder() {
+            this.templateOptions = new TemplateOptions();
+        }
 
         /**
          * Sets the name of the server.
@@ -173,13 +182,13 @@ public class FlexiantServerTemplate {
             return this;
         }
 
-        public FlexiantServerTemplateBuilder network(final String network) {
-            this.network = network;
+        public FlexiantServerTemplateBuilder image(final String image) {
+            this.image = image;
             return this;
         }
 
-        public FlexiantServerTemplateBuilder image(final String image) {
-            this.image = image;
+        public FlexiantServerTemplateBuilder templateOptions(final TemplateOptions templateOptions) {
+            this.templateOptions = templateOptions;
             return this;
         }
 
@@ -189,8 +198,8 @@ public class FlexiantServerTemplate {
                     this.serverProductOffer,
                     this.diskProductOffer,
                     this.vdc,
-                    this.network,
-                    this.image);
+                    this.image,
+                    this.templateOptions);
         }
     }
 
