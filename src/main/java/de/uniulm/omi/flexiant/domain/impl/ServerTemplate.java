@@ -158,7 +158,19 @@ public class ServerTemplate {
          */
         public FlexiantServerTemplateBuilder hardware(final Hardware hardware) {
             checkNotNull(hardware);
-            final String[] ids = hardware.getId().split(":");
+            return this.hardwareId(hardware.getId());
+        }
+
+        /**
+         * Uses the given hardware identified by the artificial hardware key.
+         *
+         * @param hardwareId the id of the hardware object.
+         * @return fluent interface
+         */
+        public FlexiantServerTemplateBuilder hardwareId(final String hardwareId) {
+            checkNotNull(hardwareId);
+            checkArgument(!hardwareId.isEmpty());
+            final String[] ids = hardwareId.split(":");
             checkArgument(ids.length == 2);
             this.serverProductOffer = ids[0];
             this.diskProductOffer = ids[1];
