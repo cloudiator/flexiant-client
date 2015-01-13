@@ -33,7 +33,7 @@
         <dependency>
             <groupId>de.uniulm.omi.flexiant.extility</groupId>
             <artifactId>extilityclient</artifactId>
-            <version>b1-20140723</version>
+            <version>b1-20150113</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
