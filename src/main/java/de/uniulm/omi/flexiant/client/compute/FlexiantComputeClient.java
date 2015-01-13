@@ -60,13 +60,14 @@ public class FlexiantComputeClient {
     /**
      * Returns all servers whose names are matching the given prefix.
      *
-     * @param prefix the prefix the server names should match.
+     * @param prefix       the prefix the server names should match.
+     * @param locationUUID optional location of the server, if null it will be ignored
      * @return a list of servers matching the prefix
      * @throws de.uniulm.omi.flexiant.client.api.FlexiantException
      */
-    public Set<FlexiantServer> getServers(final String prefix) throws FlexiantException {
+    public Set<FlexiantServer> getServers(final String prefix, @Nullable String locationUUID) throws FlexiantException {
         Set<FlexiantServer> servers = new HashSet<FlexiantServer>();
-        for (Object o : this.getResources(prefix, "resourceName", ResourceType.SERVER)) {
+        for (Object o : this.getResources(prefix, "resourceName", ResourceType.SERVER, Server.class, locationUUID)) {
             servers.add(new FlexiantServer((Server) o));
         }
         return servers;
@@ -75,13 +76,14 @@ public class FlexiantComputeClient {
     /**
      * Returns all servers.
      *
+     * @param locationUUID optional location of the server, if null it will be ignored.
      * @return all servers.
      * @throws FlexiantException
      */
-    public Set<FlexiantServer> getServers() throws FlexiantException {
+    public Set<FlexiantServer> getServers(@Nullable final String locationUUID) throws FlexiantException {
         Set<FlexiantServer> servers = new HashSet<FlexiantServer>();
-        for (Object o : this.getResources(ResourceType.SERVER)) {
-            servers.add(new FlexiantServer((Server) o));
+        for (Server server : this.getResources(ResourceType.SERVER, Server.class, locationUUID)) {
+            servers.add(new FlexiantServer(server));
         }
         return servers;
     }
@@ -89,13 +91,14 @@ public class FlexiantComputeClient {
     /**
      * Returns all images.
      *
+     * @param locationUUID optional location of the image, if null it will be ignored.
      * @return all images.
      * @throws FlexiantException
      */
-    public Set<FlexiantImage> getImages() throws FlexiantException {
+    public Set<FlexiantImage> getImages(@Nullable final String locationUUID) throws FlexiantException {
         Set<FlexiantImage> images = new HashSet<FlexiantImage>();
-        for (Object o : this.getResources(ResourceType.IMAGE)) {
-            images.add(new FlexiantImage((Image) o));
+        for (Image image : this.getResources(ResourceType.IMAGE, Image.class, locationUUID)) {
+            images.add(new FlexiantImage(image));
         }
         return images;
     }
@@ -108,11 +111,11 @@ public class FlexiantComputeClient {
      */
     public Set<FlexiantLocation> getLocations() throws FlexiantException {
         Set<FlexiantLocation> locations = new HashSet<FlexiantLocation>();
-        for (Object o : this.getResources(ResourceType.VDC)) {
-            locations.add(FlexiantLocation.from((Vdc) o, (Cluster) this.getResource(((Vdc) o).getClusterUUID(), ResourceType.CLUSTER)));
+        for (Vdc vdc : this.getResources(ResourceType.VDC, Vdc.class, null)) {
+            locations.add(FlexiantLocation.from(vdc, this.getResource((vdc).getClusterUUID(), ResourceType.CLUSTER, Cluster.class)));
         }
-        for (Object o : this.getResources(ResourceType.CLUSTER)) {
-            locations.add(FlexiantLocation.from((Cluster) o));
+        for (Cluster cluster : this.getResources(ResourceType.CLUSTER, Cluster.class, null)) {
+            locations.add(FlexiantLocation.from(cluster));
         }
         return locations;
     }
@@ -120,27 +123,28 @@ public class FlexiantComputeClient {
     /**
      * Returns all hardware.
      *
+     * @param locationUUID optional location of the hardware flavor, if null it will be ignored.
      * @return all hardware.
      * @throws FlexiantException
      */
-    public Set<FlexiantHardware> getHardwareFlavors() throws FlexiantException {
+    public Set<FlexiantHardware> getHardwareFlavors(@Nullable final String locationUUID) throws FlexiantException {
         //noinspection unchecked
-        return FlexiantHardware.from((List<ProductOffer>) this.getResources(ResourceType.PRODUCTOFFER));
+        return FlexiantHardware.from(this.getResources(ResourceType.PRODUCTOFFER, ProductOffer.class, locationUUID));
     }
 
     /**
      * Returns all networks.
      *
+     * @param locationUUID optional location of the network, if null it will be ignored.
      * @return a set of all networks.
      * @throws FlexiantException
      */
-    public Set<FlexiantNetwork> getNetworks() throws FlexiantException {
+    public Set<FlexiantNetwork> getNetworks(@Nullable final String locationUUID) throws FlexiantException {
         final Set<FlexiantNetwork> networks = new HashSet<FlexiantNetwork>();
 
-        for (final Object o : this.getResources(ResourceType.NETWORK)) {
-            networks.add(new FlexiantNetwork((Network) o));
+        for (final Network network : this.getResources(ResourceType.NETWORK, Network.class, locationUUID)) {
+            networks.add(new FlexiantNetwork(network));
         }
-
         return networks;
     }
 
@@ -150,13 +154,14 @@ public class FlexiantComputeClient {
      * It seems that flexiant does not allow to query by ip. Therefore, this
      * query loops through all servers, finding the ip.
      *
-     * @param ip the ip of the server.
+     * @param ip           the ip of the server.
+     * @param locationUUID optional location of the server, if null it will be ignored.
      * @return the server having the given ip, or null if not found
      * @throws FlexiantException
      */
     @Nullable
-    public FlexiantServer getServerByIp(String ip) throws FlexiantException {
-        return this.searchByIp(this.getServers(), ip);
+    public FlexiantServer getServerByIp(String ip, @Nullable String locationUUID) throws FlexiantException {
+        return this.searchByIp(this.getServers(locationUUID), ip);
     }
 
     /**
@@ -165,15 +170,15 @@ public class FlexiantComputeClient {
      * As we need to loop through all existing servers, the name filter can increase
      * the speed.
      *
-     * @param ip     the ip of the server.
-     * @param filter prefix to filter list of servers
+     * @param ip           the ip of the server.
+     * @param filter       prefix to filter list of servers
+     * @param locationUUID optional location of the server, if null it will be ignored.
      * @return the server with having the given ip, or null if not found.
      * @throws FlexiantException
-     * @see FlexiantComputeClient#getServerByIp(String)
      */
     @Nullable
-    public FlexiantServer getServerByIp(String ip, String filter) throws FlexiantException {
-        return this.searchByIp(this.getServers(filter), ip);
+    public FlexiantServer getServerByIp(String ip, String filter, @Nullable String locationUUID) throws FlexiantException {
+        return this.searchByIp(this.getServers(filter, locationUUID), ip);
     }
 
     /**
@@ -185,7 +190,6 @@ public class FlexiantComputeClient {
      */
     @Nullable
     protected FlexiantServer searchByIp(Set<FlexiantServer> servers, String ip) {
-
         for (FlexiantServer server : servers) {
             if (server.getPublicIpAddress() != null && server.getPublicIpAddress().equals(ip)) {
                 return server;
@@ -223,8 +227,8 @@ public class FlexiantComputeClient {
         final Set<String> networks = new HashSet<String>();
         if (flexiantServerTemplate.getTemplateOptions().getNetworks().isEmpty()) {
             //no network configured, find it out by ourselves.
-            if (this.getNetworks().size() == 1) {
-                networks.add(this.getNetworks().iterator().next().getId());
+            if (this.getNetworks(flexiantServerTemplate.getVdc()).size() == 1) {
+                networks.add(this.getNetworks(flexiantServerTemplate.getVdc()).iterator().next().getId());
             } else {
                 throw new FlexiantException("Could not uniquely identify network.");
             }
@@ -358,7 +362,7 @@ public class FlexiantComputeClient {
      */
     @Nullable
     public FlexiantServer getServer(final String serverUUID) throws FlexiantException {
-        final Server server = (Server) this.getResource(serverUUID, ResourceType.SERVER);
+        final Server server = this.getResource(serverUUID, ResourceType.SERVER, Server.class);
         if (server == null) {
             return null;
         }
@@ -374,25 +378,7 @@ public class FlexiantComputeClient {
      */
     @Nullable
     public FlexiantImage getImage(final String imageUUID) throws FlexiantException {
-        final Image image = (Image) this.getResource(imageUUID, ResourceType.IMAGE);
-        if (image == null) {
-            return null;
-        }
-        return new FlexiantImage(image);
-    }
-
-    /**
-     * Retrieves the image identified by the given uuid, which is available at the
-     * given location.
-     *
-     * @param imageUUID    the id of the image.
-     * @param locationUUID the id of the location
-     * @return an image object if found, null otherwise.
-     * @throws FlexiantException
-     */
-    @Nullable
-    public FlexiantImage getImage(final String imageUUID, final String locationUUID) throws FlexiantException {
-        final Image image = (Image) this.getResource(imageUUID, locationUUID, ResourceType.IMAGE);
+        final Image image = this.getResource(imageUUID, ResourceType.IMAGE, Image.class);
         if (image == null) {
             return null;
         }
@@ -415,8 +401,8 @@ public class FlexiantComputeClient {
 
         checkArgument(parts.length == 2, "Expected hardwareUUID to contain :");
 
-        final ProductOffer machineOffer = (ProductOffer) this.getResource(parts[0], ResourceType.PRODUCTOFFER);
-        final ProductOffer diskOffer = (ProductOffer) this.getResource(parts[1], ResourceType.PRODUCTOFFER);
+        final ProductOffer machineOffer = this.getResource(parts[0], ResourceType.PRODUCTOFFER, ProductOffer.class);
+        final ProductOffer diskOffer = this.getResource(parts[1], ResourceType.PRODUCTOFFER, ProductOffer.class);
 
 
         if (machineOffer == null || diskOffer == null) {
@@ -455,7 +441,7 @@ public class FlexiantComputeClient {
      */
     @Nullable
     protected Cluster getCluster(final String clusterUUID) throws FlexiantException {
-        return (Cluster) this.getResource(clusterUUID, ResourceType.CLUSTER);
+        return this.getResource(clusterUUID, ResourceType.CLUSTER, Cluster.class);
     }
 
     /**
@@ -467,19 +453,21 @@ public class FlexiantComputeClient {
      */
     @Nullable
     protected Vdc getVdc(final String vdcUUID) throws FlexiantException {
-        return (Vdc) this.getResource(vdcUUID, ResourceType.VDC);
+        return this.getResource(vdcUUID, ResourceType.VDC, Vdc.class);
     }
 
     /**
-     * Retrieves a resource from the flexiant api, which is identified by the given resource UUID.
+     * Retrieves a resource
      *
-     * @param resourceUUID the uuid of the resource.
-     * @param type         the type of the resource.
-     * @return an object representing the resource if any, otherwise null.
-     * @throws FlexiantException if an error occurred during the call to the api.
+     * @param resourceUUID the uuid of the resource
+     * @param resourceType the type of the resource
+     * @param type         the type of the resulting class
+     * @param <T>          the type of the resulting class
+     * @return the retrieved resource or null if not found
+     * @throws FlexiantException
      */
     @Nullable
-    protected Object getResource(final String resourceUUID, final ResourceType type) throws FlexiantException {
+    protected <T> T getResource(final String resourceUUID, final ResourceType resourceType, final Class<T> type) throws FlexiantException {
 
         SearchFilter sf = new SearchFilter();
         FilterCondition fc = new FilterCondition();
@@ -489,53 +477,24 @@ public class FlexiantComputeClient {
         fc.getValue().add(resourceUUID);
         sf.getFilterConditions().add(fc);
 
-        return this.getSingleResource(sf, type);
-    }
-
-    /**
-     * Retrieves a resource from the flexiant api, which is identified by the given resource UUID and the given location UUID.
-     * <p/>
-     * This method is required if the desired resource is location dependant, and you want to ensure the resource exists at
-     * the required location.
-     *
-     * @param resourceUUID the uuid of the resource.
-     * @param locationUUID the uuid of the location.
-     * @param type         the type of the resource.
-     * @return the resource if found, null if not.
-     * @throws FlexiantException if multiple resources where found or an error occurred during the call to the api.
-     */
-    @Nullable
-    protected Object getResource(final String resourceUUID, final String locationUUID, final ResourceType type) throws FlexiantException {
-        SearchFilter sf = new SearchFilter();
-        FilterCondition fcResource = new FilterCondition();
-
-        fcResource.setCondition(Condition.IS_EQUAL_TO);
-        fcResource.setField("resourceUUID");
-        fcResource.getValue().add(resourceUUID);
-        sf.getFilterConditions().add(fcResource);
-
-        FilterCondition fcLocation = new FilterCondition();
-        fcLocation.setCondition(Condition.IS_EQUAL_TO);
-        fcLocation.setField("vdcUUID");
-        fcLocation.getValue().add(locationUUID);
-        sf.getFilterConditions().add(fcLocation);
-
-        return this.getSingleResource(sf, type);
+        //noinspection unchecked
+        return this.getSingleResource(sf, resourceType, type);
     }
 
     /**
      * Retrieves a single resource using the given search filter and the
      * given resource type.
      *
-     * @param sf   the search filter.
-     * @param type the resource type.
+     * @param sf           the search filter.
+     * @param resourceType the resource type.
+     * @param type         the type of the resulting class.
      * @return the resource or null if not found.
      * @throws FlexiantException if multiple resources are returned or an error occurs while contacting the api.
      */
     @Nullable
-    protected Object getSingleResource(final SearchFilter sf, final ResourceType type) throws FlexiantException {
+    protected <T> T getSingleResource(final SearchFilter sf, final ResourceType resourceType, final Class<T> type) throws FlexiantException {
         try {
-            ListResult result = this.getService().listResources(sf, null, type);
+            ListResult result = this.getService().listResources(sf, null, resourceType);
 
             if (result.getList().size() > 1) {
                 throw new FlexiantException("Found multiple resources, single resource expected.");
@@ -545,7 +504,8 @@ public class FlexiantComputeClient {
                 return null;
             }
 
-            return result.getList().get(0);
+            //noinspection unchecked
+            return (T) result.getList().get(0);
 
         } catch (ExtilityException e) {
             throw new FlexiantException("Error while retrieving resources", e);
@@ -557,13 +517,15 @@ public class FlexiantComputeClient {
      * Retrieves a list of resources matching the given prefix on the given attribute
      * which are of the given type.
      *
-     * @param prefix    the prefix to match.
-     * @param attribute the attribute where the prefix should match.
-     * @param type      the type of the resource.
+     * @param prefix       the prefix to match.
+     * @param attribute    the attribute where the prefix should match.
+     * @param resourceType the type of the resource.
+     * @param type         the type of the resulting class.
+     * @param locationUUID optional location of the type, if null it will be ignored.
      * @return a list containing all resources matching the request.
      * @throws FlexiantException if an error occurs while contacting the api.
      */
-    protected List<?> getResources(final String prefix, final String attribute, final ResourceType type) throws FlexiantException {
+    protected <T> List<T> getResources(final String prefix, final String attribute, final ResourceType resourceType, final Class<T> type, @Nullable final String locationUUID) throws FlexiantException {
 
         SearchFilter sf = new SearchFilter();
         FilterCondition fc = new FilterCondition();
@@ -575,25 +537,48 @@ public class FlexiantComputeClient {
 
         sf.getFilterConditions().add(fc);
 
+        if (locationUUID != null) {
+            FilterCondition fcLocation = new FilterCondition();
+            fcLocation.setCondition(Condition.IS_EQUAL_TO);
+            fcLocation.setField("vdcUUID");
+            fcLocation.getValue().add(locationUUID);
+            sf.getFilterConditions().add(fcLocation);
+        }
+
         try {
-            return this.getService().listResources(sf, null, type).getList();
+            //noinspection unchecked
+            return (List<T>) this.getService().listResources(sf, null, resourceType).getList();
         } catch (ExtilityException e) {
-            throw new FlexiantException(String.format("Error while retrieving resource with prefix %s on attribute %s of type %s", prefix, attribute, type), e);
+            throw new FlexiantException(String.format("Error while retrieving resource with prefix %s on attribute %s of resourceType %s", prefix, attribute, resourceType), e);
         }
     }
 
     /**
      * Returns all resources of the given type.
      *
-     * @param type the resource type.
+     * @param resourceType the resource type.
+     * @param locationUUID optional location of the type, if null it will be ignored
+     * @param type         the type of the resulting class.
      * @return a list of all resources of the given type.
      * @throws FlexiantException
      */
-    protected List<?> getResources(final ResourceType type) throws FlexiantException {
+    protected <T> List<T> getResources(final ResourceType resourceType, final Class<T> type, @Nullable final String locationUUID) throws FlexiantException {
+
+        SearchFilter sf = new SearchFilter();
+
+        if (locationUUID != null) {
+            FilterCondition fcLocation = new FilterCondition();
+            fcLocation.setCondition(Condition.IS_EQUAL_TO);
+            fcLocation.setField("vdcUUID");
+            fcLocation.getValue().add(locationUUID);
+            sf.getFilterConditions().add(fcLocation);
+        }
+
         try {
-            return this.getService().listResources(null, null, type).getList();
+            //noinspection unchecked
+            return (List<T>) this.getService().listResources(null, null, resourceType).getList();
         } catch (ExtilityException e) {
-            throw new FlexiantException(String.format("Error while retrieving resources of type %s.", type), e);
+            throw new FlexiantException(String.format("Error while retrieving resources of resourceType %s.", resourceType), e);
         }
     }
 }

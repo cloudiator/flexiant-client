@@ -25,6 +25,7 @@ public class FlexiantLocation extends AbstractFlexiantResource {
         return new FlexiantLocation(vdc, cluster);
     }
 
+
     private FlexiantLocation(final Vdc vdc, final Cluster cluster) {
         super(vdc);
         this.locationScope = FlexiantLocationScope.VDC;
