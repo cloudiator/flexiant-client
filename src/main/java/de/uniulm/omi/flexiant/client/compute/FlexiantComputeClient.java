@@ -576,7 +576,7 @@ public class FlexiantComputeClient {
 
         try {
             //noinspection unchecked
-            return (List<T>) this.getService().listResources(null, null, resourceType).getList();
+            return (List<T>) this.getService().listResources(sf, null, resourceType).getList();
         } catch (ExtilityException e) {
             throw new FlexiantException(String.format("Error while retrieving resources of resourceType %s.", resourceType), e);
         }
