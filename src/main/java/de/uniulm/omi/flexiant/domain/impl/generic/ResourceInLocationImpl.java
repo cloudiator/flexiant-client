@@ -16,4 +16,16 @@ public abstract class ResourceInLocationImpl extends ResourceImpl implements Res
     public String getLocationUUID() {
         return ((VirtualResource) this.resource).getClusterUUID();
     }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof ResourceInLocation
+                && this.getId().equals(((ResourceInLocation) obj).getId())
+                && this.getLocationUUID().equals(((ResourceInLocation) obj).getLocationUUID());
+    }
 }
