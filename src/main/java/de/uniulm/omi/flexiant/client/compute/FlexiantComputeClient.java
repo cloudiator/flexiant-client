@@ -18,7 +18,9 @@ package de.uniulm.omi.flexiant.client.compute;
 
 import de.uniulm.omi.flexiant.client.FlexiantBaseClient;
 import de.uniulm.omi.flexiant.client.api.FlexiantException;
-import de.uniulm.omi.flexiant.domain.impl.*;
+import de.uniulm.omi.flexiant.domain.impl.Hardware;
+import de.uniulm.omi.flexiant.domain.impl.Location;
+import de.uniulm.omi.flexiant.domain.impl.ServerTemplate;
 import de.uniulm.omi.flexiant.extility.*;
 
 import javax.annotation.Nullable;
@@ -389,11 +391,12 @@ public class FlexiantComputeClient {
      * Retrieves the hardware identified by the given uuid.
      *
      * @param hardwareUUID the id of the hardware
+     * @param locationUUID the id of the location
      * @return information about the hardware if any, otherwise null.
      * @throws FlexiantException
      */
     @Nullable
-    public Hardware getHardware(final String hardwareUUID) throws FlexiantException {
+    public Hardware getHardware(final String hardwareUUID, final String locationUUID) throws FlexiantException {
 
         checkNotNull(hardwareUUID);
 
@@ -408,7 +411,7 @@ public class FlexiantComputeClient {
         if (machineOffer == null || diskOffer == null) {
             return null;
         }
-        return Hardware.from(machineOffer, diskOffer);
+        return Hardware.from(machineOffer, diskOffer, locationUUID);
     }
 
     /**
