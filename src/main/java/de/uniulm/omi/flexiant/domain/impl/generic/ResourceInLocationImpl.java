@@ -13,12 +13,7 @@ public abstract class ResourceInLocationImpl extends ResourceImpl implements Res
     }
 
     @Override
-    public String getVdcUUID() {
-        return ((VirtualResource) this.resource).getVdcUUID();
-    }
-
-    @Override
-    public String getClusterUUID() {
+    public String getLocationUUID() {
         return ((VirtualResource) this.resource).getClusterUUID();
     }
 }

@@ -1,6 +1,6 @@
 package de.uniulm.omi.flexiant.domain.impl;
 
-import de.uniulm.omi.flexiant.domain.api.Resource;
+import de.uniulm.omi.flexiant.domain.api.ResourceInLocation;
 import de.uniulm.omi.flexiant.extility.ProductComponent;
 import de.uniulm.omi.flexiant.extility.ProductOffer;
 import de.uniulm.omi.flexiant.extility.Value;
@@ -10,9 +10,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-public class Hardware implements Resource {
+public class Hardware implements ResourceInLocation {
 
     private static final String DISK_KEY = "size";
     private static final String RAM_KEY = "ram";
@@ -20,9 +21,10 @@ public class Hardware implements Resource {
 
     private final ProductOffer disk;
     private final ProductOffer machine;
+    private final String locationUUID;
 
-    public static Hardware from(final ProductOffer machine, final ProductOffer disk) {
-        return new Hardware(machine, disk);
+    public static Hardware from(final ProductOffer machine, final ProductOffer disk, final String locationUUID) {
+        return new Hardware(machine, disk, locationUUID);
     }
 
     public static Set<Hardware> from(final List<ProductOffer> offers) {
@@ -51,25 +53,34 @@ public class Hardware implements Resource {
         Set<Hardware> hardware = new HashSet<Hardware>();
         for (ProductOffer machineOffer : machineOffers) {
             for (ProductOffer diskOffer : diskOffers) {
-                hardware.add(Hardware.from(machineOffer, diskOffer));
+                for (String locationUUID : machineOffer.getClusters()) {
+                    if (diskOffer.getClusters().contains(locationUUID)) {
+                        hardware.add(Hardware.from(machineOffer, diskOffer, locationUUID));
+                    }
+                }
             }
         }
 
         return hardware;
     }
 
-    private Hardware(final ProductOffer machine, final ProductOffer disk) {
+    private Hardware(final ProductOffer machine, final ProductOffer disk, final String locationUUID) {
 
         checkNotNull(machine);
         checkNotNull(disk);
+        checkNotNull(locationUUID);
+        checkArgument(!locationUUID.isEmpty());
 
         checkArgument(this.searchForValueInProductOffer(CPU_KEY, machine) != null, "Machine Offer does not contain cpu key.");
         checkArgument(this.searchForValueInProductOffer(RAM_KEY, machine) != null, "Machine Offer does not contain ram key.");
-
         checkArgument(this.searchForValueInProductOffer(DISK_KEY, disk) != null, "Disk Offer does not contain disk key.");
+
+        checkArgument(machine.getClusters().contains(locationUUID));
+        checkArgument(disk.getClusters().contains(locationUUID));
 
         this.machine = machine;
         this.disk = disk;
+        this.locationUUID = locationUUID;
     }
 
     @Override
@@ -99,13 +110,13 @@ public class Hardware implements Resource {
 
     public int getCores() {
         String value = this.searchForValueInProductOffer(CPU_KEY, this.machine);
-        checkState(value != null, "Machine offer does not contain cpu key.");
+        checkNotNull(value, "Machine offer does not contain cpu key.");
         return Integer.parseInt(value);
     }
 
     public int getRam() {
         String value = this.searchForValueInProductOffer(RAM_KEY, this.machine);
-        checkState(value != null, "Machine offer does not contain ram key.");
+        checkNotNull(value, "Machine offer does not contain ram key.");
         return Integer.parseInt(value);
     }
 
@@ -124,5 +135,10 @@ public class Hardware implements Resource {
             }
         }
         return null;
+    }
+
+    @Override
+    public String getLocationUUID() {
+        return this.locationUUID;
     }
 }

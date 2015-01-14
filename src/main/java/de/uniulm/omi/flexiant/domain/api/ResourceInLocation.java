@@ -5,8 +5,6 @@ package de.uniulm.omi.flexiant.domain.api;
  */
 public interface ResourceInLocation extends Resource {
 
-    public String getVdcUUID();
-
-    public String getClusterUUID();
+    public String getLocationUUID();
 
 }
