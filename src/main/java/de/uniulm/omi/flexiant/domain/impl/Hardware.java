@@ -90,12 +90,12 @@ public class Hardware implements ResourceInLocation {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Hardware && ((Hardware) obj).getId().equals(this.getId());
+        return obj instanceof Hardware && ((Hardware) obj).getId().equals(this.getId()) && ((Hardware) obj).getLocationUUID().equals(this.getLocationUUID());
     }
 
     @Override
     public int hashCode() {
-        return this.getId().hashCode();
+        return (this.getId() + "/" + this.getLocationUUID()).hashCode();
     }
 
     @Override
