@@ -16,23 +16,12 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.domain.impl;
-
-import java.util.HashSet;
-import java.util.Set;
+package de.uniulm.omi.cloudiator.flexiant.client.domain;
 
 /**
- * Created by daniel on 13.01.15.
+ * Created by daniel on 09.01.15.
  */
-public class TemplateOptions {
-
-    private final Set<String> networks;
-
-    public TemplateOptions() {
-        networks = new HashSet<String>();
-    }
-
-    public Set<String> getNetworks() {
-        return networks;
-    }
+public enum LocationScope {
+    CLUSTER,
+    VDC
 }

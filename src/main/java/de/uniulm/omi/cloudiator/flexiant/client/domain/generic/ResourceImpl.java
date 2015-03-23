@@ -16,9 +16,9 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.domain.impl.generic;
+package de.uniulm.omi.cloudiator.flexiant.client.domain.generic;
 
-import de.uniulm.omi.flexiant.domain.api.Resource;
+import de.uniulm.omi.cloudiator.flexiant.client.api.Resource;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

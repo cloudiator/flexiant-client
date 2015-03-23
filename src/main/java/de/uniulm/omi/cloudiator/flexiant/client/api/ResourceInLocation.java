@@ -16,30 +16,13 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.client.api;
+package de.uniulm.omi.cloudiator.flexiant.client.api;
 
 /**
- * An exception class wrapping exceptions which occur during the communication with the
- * flexiant extility api.
+ * Created by daniel on 13.01.15.
  */
-public class FlexiantException extends Exception {
+public interface ResourceInLocation extends Resource {
 
-    /**
-	 * Default serial version.
-	 */
-	private static final long serialVersionUID = 1L;
+    public String getLocationUUID();
 
-	/**
-     * @see java.lang.Exception#Exception(String)
-     */
-    public FlexiantException(String message) {
-        super(message);
-    }
-
-    /**
-     * @see java.lang.Exception#Exception(String, java.lang.Throwable)
-     */
-    public FlexiantException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

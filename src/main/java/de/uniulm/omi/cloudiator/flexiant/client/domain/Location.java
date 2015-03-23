@@ -16,9 +16,9 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.domain.impl;
+package de.uniulm.omi.cloudiator.flexiant.client.domain;
 
-import de.uniulm.omi.flexiant.domain.impl.generic.ResourceImpl;
+import de.uniulm.omi.cloudiator.flexiant.client.domain.generic.ResourceImpl;
 import de.uniulm.omi.flexiant.extility.Cluster;
 import de.uniulm.omi.flexiant.extility.Vdc;
 

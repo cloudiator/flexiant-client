@@ -16,13 +16,12 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.client.compute;
+package de.uniulm.omi.cloudiator.flexiant.client.compute;
 
-import de.uniulm.omi.flexiant.client.FlexiantBaseClient;
-import de.uniulm.omi.flexiant.client.api.FlexiantException;
-import de.uniulm.omi.flexiant.domain.impl.Hardware;
-import de.uniulm.omi.flexiant.domain.impl.Location;
-import de.uniulm.omi.flexiant.domain.impl.ServerTemplate;
+import de.uniulm.omi.cloudiator.flexiant.client.api.FlexiantException;
+import de.uniulm.omi.cloudiator.flexiant.client.domain.Hardware;
+import de.uniulm.omi.cloudiator.flexiant.client.domain.Location;
+import de.uniulm.omi.cloudiator.flexiant.client.domain.ServerTemplate;
 import de.uniulm.omi.flexiant.extility.*;
 
 import javax.annotation.Nullable;
@@ -67,12 +66,12 @@ public class FlexiantComputeClient {
      * @param prefix       the prefix the server names should match.
      * @param locationUUID optional location of the server, if null it will be ignored
      * @return a list of servers matching the prefix
-     * @throws de.uniulm.omi.flexiant.client.api.FlexiantException
+     * @throws de.uniulm.omi.cloudiator.flexiant.client.api.FlexiantException
      */
-    public Set<de.uniulm.omi.flexiant.domain.impl.Server> getServers(final String prefix, @Nullable String locationUUID) throws FlexiantException {
-        Set<de.uniulm.omi.flexiant.domain.impl.Server> servers = new HashSet<de.uniulm.omi.flexiant.domain.impl.Server>();
+    public Set<de.uniulm.omi.cloudiator.flexiant.client.domain.Server> getServers(final String prefix, @Nullable String locationUUID) throws FlexiantException {
+        Set<de.uniulm.omi.cloudiator.flexiant.client.domain.Server> servers = new HashSet<de.uniulm.omi.cloudiator.flexiant.client.domain.Server>();
         for (Object o : this.getResources(prefix, "resourceName", ResourceType.SERVER, de.uniulm.omi.flexiant.extility.Server.class, locationUUID)) {
-            servers.add(new de.uniulm.omi.flexiant.domain.impl.Server((de.uniulm.omi.flexiant.extility.Server) o));
+            servers.add(new de.uniulm.omi.cloudiator.flexiant.client.domain.Server((de.uniulm.omi.flexiant.extility.Server) o));
         }
         return servers;
     }
@@ -84,10 +83,10 @@ public class FlexiantComputeClient {
      * @return all servers.
      * @throws FlexiantException
      */
-    public Set<de.uniulm.omi.flexiant.domain.impl.Server> getServers(@Nullable final String locationUUID) throws FlexiantException {
-        Set<de.uniulm.omi.flexiant.domain.impl.Server> servers = new HashSet<de.uniulm.omi.flexiant.domain.impl.Server>();
+    public Set<de.uniulm.omi.cloudiator.flexiant.client.domain.Server> getServers(@Nullable final String locationUUID) throws FlexiantException {
+        Set<de.uniulm.omi.cloudiator.flexiant.client.domain.Server> servers = new HashSet<de.uniulm.omi.cloudiator.flexiant.client.domain.Server>();
         for (de.uniulm.omi.flexiant.extility.Server server : this.getResources(ResourceType.SERVER, de.uniulm.omi.flexiant.extility.Server.class, locationUUID)) {
-            servers.add(new de.uniulm.omi.flexiant.domain.impl.Server(server));
+            servers.add(new de.uniulm.omi.cloudiator.flexiant.client.domain.Server(server));
         }
         return servers;
     }
@@ -99,10 +98,10 @@ public class FlexiantComputeClient {
      * @return all images.
      * @throws FlexiantException
      */
-    public Set<de.uniulm.omi.flexiant.domain.impl.Image> getImages(@Nullable final String locationUUID) throws FlexiantException {
-        Set<de.uniulm.omi.flexiant.domain.impl.Image> images = new HashSet<de.uniulm.omi.flexiant.domain.impl.Image>();
+    public Set<de.uniulm.omi.cloudiator.flexiant.client.domain.Image> getImages(@Nullable final String locationUUID) throws FlexiantException {
+        Set<de.uniulm.omi.cloudiator.flexiant.client.domain.Image> images = new HashSet<de.uniulm.omi.cloudiator.flexiant.client.domain.Image>();
         for (de.uniulm.omi.flexiant.extility.Image image : this.getResources(ResourceType.IMAGE, de.uniulm.omi.flexiant.extility.Image.class, locationUUID)) {
-            images.add(new de.uniulm.omi.flexiant.domain.impl.Image(image));
+            images.add(new de.uniulm.omi.cloudiator.flexiant.client.domain.Image(image));
         }
         return images;
     }
@@ -143,11 +142,11 @@ public class FlexiantComputeClient {
      * @return a set of all networks.
      * @throws FlexiantException
      */
-    public Set<de.uniulm.omi.flexiant.domain.impl.Network> getNetworks(@Nullable final String locationUUID) throws FlexiantException {
-        final Set<de.uniulm.omi.flexiant.domain.impl.Network> networks = new HashSet<de.uniulm.omi.flexiant.domain.impl.Network>();
+    public Set<de.uniulm.omi.cloudiator.flexiant.client.domain.Network> getNetworks(@Nullable final String locationUUID) throws FlexiantException {
+        final Set<de.uniulm.omi.cloudiator.flexiant.client.domain.Network> networks = new HashSet<de.uniulm.omi.cloudiator.flexiant.client.domain.Network>();
 
         for (final de.uniulm.omi.flexiant.extility.Network network : this.getResources(ResourceType.NETWORK, de.uniulm.omi.flexiant.extility.Network.class, locationUUID)) {
-            networks.add(new de.uniulm.omi.flexiant.domain.impl.Network(network));
+            networks.add(new de.uniulm.omi.cloudiator.flexiant.client.domain.Network(network));
         }
         return networks;
     }
@@ -164,7 +163,7 @@ public class FlexiantComputeClient {
      * @throws FlexiantException
      */
     @Nullable
-    public de.uniulm.omi.flexiant.domain.impl.Server getServerByIp(String ip, @Nullable String locationUUID) throws FlexiantException {
+    public de.uniulm.omi.cloudiator.flexiant.client.domain.Server getServerByIp(String ip, @Nullable String locationUUID) throws FlexiantException {
         return this.searchByIp(this.getServers(locationUUID), ip);
     }
 
@@ -181,7 +180,7 @@ public class FlexiantComputeClient {
      * @throws FlexiantException
      */
     @Nullable
-    public de.uniulm.omi.flexiant.domain.impl.Server getServerByIp(String ip, String filter, @Nullable String locationUUID) throws FlexiantException {
+    public de.uniulm.omi.cloudiator.flexiant.client.domain.Server getServerByIp(String ip, String filter, @Nullable String locationUUID) throws FlexiantException {
         return this.searchByIp(this.getServers(filter, locationUUID), ip);
     }
 
@@ -193,8 +192,8 @@ public class FlexiantComputeClient {
      * @return the server matching the ip or null
      */
     @Nullable
-    protected de.uniulm.omi.flexiant.domain.impl.Server searchByIp(Set<de.uniulm.omi.flexiant.domain.impl.Server> servers, String ip) {
-        for (de.uniulm.omi.flexiant.domain.impl.Server server : servers) {
+    protected de.uniulm.omi.cloudiator.flexiant.client.domain.Server searchByIp(Set<de.uniulm.omi.cloudiator.flexiant.client.domain.Server> servers, String ip) {
+        for (de.uniulm.omi.cloudiator.flexiant.client.domain.Server server : servers) {
             if (server.getPublicIpAddress() != null && server.getPublicIpAddress().equals(ip)) {
                 return server;
             }
@@ -212,7 +211,7 @@ public class FlexiantComputeClient {
      * @return the created server.
      * @throws FlexiantException
      */
-    public de.uniulm.omi.flexiant.domain.impl.Server createServer(final ServerTemplate serverTemplate) throws FlexiantException {
+    public de.uniulm.omi.cloudiator.flexiant.client.domain.Server createServer(final ServerTemplate serverTemplate) throws FlexiantException {
 
         checkNotNull(serverTemplate);
 
@@ -273,7 +272,7 @@ public class FlexiantComputeClient {
      * @throws FlexiantException
      * @see FlexiantComputeClient#startServer(String)
      */
-    public void startServer(de.uniulm.omi.flexiant.domain.impl.Server server) throws FlexiantException {
+    public void startServer(de.uniulm.omi.cloudiator.flexiant.client.domain.Server server) throws FlexiantException {
         if (server == null) {
             throw new IllegalArgumentException("The given server must not be null.");
         }
@@ -298,7 +297,7 @@ public class FlexiantComputeClient {
      * @throws FlexiantException
      * @see FlexiantComputeClient#stopServer(String)
      */
-    public void stopServer(de.uniulm.omi.flexiant.domain.impl.Server server) throws FlexiantException {
+    public void stopServer(de.uniulm.omi.cloudiator.flexiant.client.domain.Server server) throws FlexiantException {
         if (server == null) {
             throw new IllegalArgumentException("The given server must not be null.");
         }
@@ -312,7 +311,7 @@ public class FlexiantComputeClient {
      * @param server the server to be deleted.
      * @throws FlexiantException
      */
-    public void deleteServer(final de.uniulm.omi.flexiant.domain.impl.Server server) throws FlexiantException {
+    public void deleteServer(final de.uniulm.omi.cloudiator.flexiant.client.domain.Server server) throws FlexiantException {
         this.deleteServer(server.getId());
     }
 
@@ -365,12 +364,12 @@ public class FlexiantComputeClient {
      * @throws FlexiantException
      */
     @Nullable
-    public de.uniulm.omi.flexiant.domain.impl.Server getServer(final String serverUUID) throws FlexiantException {
+    public de.uniulm.omi.cloudiator.flexiant.client.domain.Server getServer(final String serverUUID) throws FlexiantException {
         final de.uniulm.omi.flexiant.extility.Server server = this.getResource(serverUUID, ResourceType.SERVER, de.uniulm.omi.flexiant.extility.Server.class);
         if (server == null) {
             return null;
         }
-        return new de.uniulm.omi.flexiant.domain.impl.Server(server);
+        return new de.uniulm.omi.cloudiator.flexiant.client.domain.Server(server);
     }
 
     /**
@@ -381,12 +380,12 @@ public class FlexiantComputeClient {
      * @throws FlexiantException
      */
     @Nullable
-    public de.uniulm.omi.flexiant.domain.impl.Image getImage(final String imageUUID) throws FlexiantException {
+    public de.uniulm.omi.cloudiator.flexiant.client.domain.Image getImage(final String imageUUID) throws FlexiantException {
         final de.uniulm.omi.flexiant.extility.Image image = this.getResource(imageUUID, ResourceType.IMAGE, de.uniulm.omi.flexiant.extility.Image.class);
         if (image == null) {
             return null;
         }
-        return new de.uniulm.omi.flexiant.domain.impl.Image(image);
+        return new de.uniulm.omi.cloudiator.flexiant.client.domain.Image(image);
     }
 
     /**

@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.client;
+package de.uniulm.omi.cloudiator.flexiant.client.compute;
 
 import java.net.MalformedURLException;
 import java.net.URL;

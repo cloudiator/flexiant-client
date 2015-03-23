@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.domain.impl;
+package de.uniulm.omi.cloudiator.flexiant.client.domain;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;

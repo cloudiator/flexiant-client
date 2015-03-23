@@ -16,16 +16,28 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.domain.impl;
+package de.uniulm.omi.cloudiator.flexiant.client.domain;
 
-import de.uniulm.omi.flexiant.domain.impl.generic.ResourceImpl;
+import de.uniulm.omi.cloudiator.flexiant.client.domain.generic.ResourceInLocationImpl;
 
-/**
- * Created by daniel on 13.01.15.
- */
-public class Network extends ResourceImpl {
+import javax.annotation.Nullable;
 
-    public Network(de.uniulm.omi.flexiant.extility.Network network) {
-        super(network);
+public class Image extends ResourceInLocationImpl {
+
+    public Image(final de.uniulm.omi.flexiant.extility.Image image) {
+        super(image);
+    }
+
+    protected de.uniulm.omi.flexiant.extility.Image getImage() {
+        return (de.uniulm.omi.flexiant.extility.Image) this.resource;
+    }
+
+    @Nullable
+    public String getDefaultUser() {
+        return getImage().getDefaultUser();
+    }
+
+    public boolean isGenPassword() {
+        return getImage().isGenPassword();
     }
 }

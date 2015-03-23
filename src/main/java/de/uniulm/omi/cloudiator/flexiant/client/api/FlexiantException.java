@@ -16,28 +16,30 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.domain.impl;
+package de.uniulm.omi.cloudiator.flexiant.client.api;
 
-import de.uniulm.omi.flexiant.domain.impl.generic.ResourceInLocationImpl;
+/**
+ * An exception class wrapping exceptions which occur during the communication with the
+ * flexiant extility api.
+ */
+public class FlexiantException extends Exception {
 
-import javax.annotation.Nullable;
+    /**
+	 * Default serial version.
+	 */
+	private static final long serialVersionUID = 1L;
 
-public class Image extends ResourceInLocationImpl {
-
-    public Image(final de.uniulm.omi.flexiant.extility.Image image) {
-        super(image);
+	/**
+     * @see java.lang.Exception#Exception(String)
+     */
+    public FlexiantException(String message) {
+        super(message);
     }
 
-    protected de.uniulm.omi.flexiant.extility.Image getImage() {
-        return (de.uniulm.omi.flexiant.extility.Image) this.resource;
-    }
-
-    @Nullable
-    public String getDefaultUser() {
-        return getImage().getDefaultUser();
-    }
-
-    public boolean isGenPassword() {
-        return getImage().isGenPassword();
+    /**
+     * @see java.lang.Exception#Exception(String, java.lang.Throwable)
+     */
+    public FlexiantException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

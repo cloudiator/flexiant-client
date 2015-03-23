@@ -16,9 +16,9 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.domain.impl;
+package de.uniulm.omi.cloudiator.flexiant.client.domain;
 
-import de.uniulm.omi.flexiant.domain.impl.generic.ResourceInLocationImpl;
+import de.uniulm.omi.cloudiator.flexiant.client.domain.generic.ResourceInLocationImpl;
 import de.uniulm.omi.flexiant.extility.Ip;
 import de.uniulm.omi.flexiant.extility.IpType;
 import de.uniulm.omi.flexiant.extility.NetworkType;

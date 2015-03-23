@@ -16,13 +16,16 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.domain.api;
+package de.uniulm.omi.cloudiator.flexiant.client.domain;
+
+import de.uniulm.omi.cloudiator.flexiant.client.domain.generic.ResourceImpl;
 
 /**
  * Created by daniel on 13.01.15.
  */
-public interface ResourceInLocation extends Resource {
+public class Network extends ResourceImpl {
 
-    public String getLocationUUID();
-
+    public Network(de.uniulm.omi.flexiant.extility.Network network) {
+        super(network);
+    }
 }

@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package de.uniulm.omi.flexiant.domain.api;
+package de.uniulm.omi.cloudiator.flexiant.client.api;
 
 /**
  * Created by daniel on 05.12.14.
