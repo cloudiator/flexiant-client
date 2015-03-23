@@ -26,6 +26,8 @@
         <artifactId>cloudiator-pom</artifactId>
         <version>0.1.1-RELEASE</version>
     </parent>
+    <!--suppress MavenRedundantGroupId -->
+    <groupId>de.uniulm.omi.cloudiator.flexiant</groupId>
     <artifactId>flexiant-client</artifactId>
     <version>1.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -40,8 +42,8 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>de.uniulm.omi.flexiant.extility</groupId>
-                <artifactId>extilityclient</artifactId>
+                <groupId>de.uniulm.omi.cloudiator.flexiant.extility</groupId>
+                <artifactId>extility-client</artifactId>
                 <version>${extility.version}</version>
             </dependency>
         </dependencies>
@@ -53,9 +55,8 @@
             <artifactId>junit</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.uniulm.omi.flexiant.extility</groupId>
-            <artifactId>extilityclient</artifactId>
-            <version>b1-20150113</version>
+            <groupId>de.uniulm.omi.cloudiator.flexiant.extility</groupId>
+            <artifactId>extility-client</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
