@@ -36,7 +36,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <extility.version>b1-20150323</extility.version>
+        <extility.version>b12-20150420</extility.version>
     </properties>
 
     <dependencyManagement>
