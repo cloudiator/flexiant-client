@@ -247,7 +247,7 @@ public class FlexiantComputeClient {
         }
 
         try {
-            Job serverJob = this.getService().createServer(server, null, null);
+            Job serverJob = this.getService().createServer(server, null, null, null);
             this.getService().waitForJob(serverJob.getResourceUUID(), true);
             return this.getServer(serverJob.getItemUUID());
         } catch (ExtilityException e) {
