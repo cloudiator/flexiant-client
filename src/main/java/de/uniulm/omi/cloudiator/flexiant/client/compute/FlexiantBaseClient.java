@@ -18,14 +18,13 @@
 
 package de.uniulm.omi.cloudiator.flexiant.client.compute;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import de.uniulm.omi.flexiant.extility.UserAPI;
+import de.uniulm.omi.flexiant.extility.UserService;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
-
-import de.uniulm.omi.flexiant.extility.UserAPI;
-import de.uniulm.omi.flexiant.extility.UserService;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -41,13 +40,13 @@ public class FlexiantBaseClient {
 
     /**
      * Constructor for the class.
-     *
+     * <p>
      * Creates a connection to the server at the given endpoint using
      * the apiUserName and password for auth.
      *
-     * @param endpoint URL for the flexiant api
+     * @param endpoint    URL for the flexiant api
      * @param apiUserName User for authentication
-     * @param password Password for authentication
+     * @param password    Password for authentication
      */
     public FlexiantBaseClient(String endpoint, String apiUserName, String password) {
 
@@ -61,19 +60,20 @@ public class FlexiantBaseClient {
         this.customerUUID = apiUserName.split("/")[0];
 
         // disable sni name checking
-        System.setProperty ("jsse.enableSNIExtension", "false");
+        System.setProperty("jsse.enableSNIExtension", "false");
 
         // Get the service WSDL from the client jar
         URL url;
         try {
             url = new URL(endpoint + "/?wsdl");
         } catch (MalformedURLException e) {
-            throw new IllegalArgumentException(String.format("The WSDL Url %s is malformed. Check your endpoint.", endpoint + "/?wsdl"), e);
+            throw new IllegalArgumentException(String
+                .format("The WSDL Url %s is malformed. Check your endpoint.", endpoint + "/?wsdl"),
+                e);
         }
 
         // Get the UserAPI
-        UserAPI api = new UserAPI(url,
-                new QName("http://extility.flexiant.net", "UserAPI"));
+        UserAPI api = new UserAPI(url, new QName("http://extility.flexiant.net", "UserAPI"));
 
         // and set the service port on the service
         service = api.getUserServicePort();
@@ -82,14 +82,11 @@ public class FlexiantBaseClient {
         BindingProvider portBP = (BindingProvider) service;
 
         // and set the service endpoint
-        portBP.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                endpoint);
+        portBP.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
 
         // and the caller's authentication details and password
-        portBP.getRequestContext().put(BindingProvider.USERNAME_PROPERTY,
-                apiUserName);
-        portBP.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY,
-                password);
+        portBP.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, apiUserName);
+        portBP.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, password);
     }
 
     /**

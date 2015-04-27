@@ -32,8 +32,7 @@ public class Image extends ResourceInLocationImpl {
         return (de.uniulm.omi.flexiant.extility.Image) this.resource;
     }
 
-    @Nullable
-    public String getDefaultUser() {
+    @Nullable public String getDefaultUser() {
         return getImage().getDefaultUser();
     }
 

@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A class describing a template from which a new server can be started.
- * <p/>
+ * <p>
  * To create a new instance, use the builder.
  *
  * @see ServerTemplate.FlexiantServerTemplateBuilder
@@ -37,13 +37,9 @@ public class ServerTemplate {
     private final String image;
     private final TemplateOptions templateOptions;
 
-    private ServerTemplate(
-            final String serverName,
-            final String serverProductOffer,
-            final String diskProductOffer,
-            final String vdc,
-            final String image,
-            final TemplateOptions templateOptions) {
+    private ServerTemplate(final String serverName, final String serverProductOffer,
+        final String diskProductOffer, final String vdc, final String image,
+        final TemplateOptions templateOptions) {
 
         checkNotNull(serverName);
         checkArgument(!serverName.isEmpty());
@@ -124,7 +120,7 @@ public class ServerTemplate {
 
         /**
          * No-args constructor.
-         * <p/>
+         * <p>
          * Initializes template options with a default value.
          */
         public FlexiantServerTemplateBuilder() {
@@ -217,19 +213,15 @@ public class ServerTemplate {
             return this;
         }
 
-        public FlexiantServerTemplateBuilder templateOptions(final TemplateOptions templateOptions) {
+        public FlexiantServerTemplateBuilder templateOptions(
+            final TemplateOptions templateOptions) {
             this.templateOptions = templateOptions;
             return this;
         }
 
         public ServerTemplate build() {
-            return new ServerTemplate(
-                    this.serverName,
-                    this.serverProductOffer,
-                    this.diskProductOffer,
-                    this.vdc,
-                    this.image,
-                    this.templateOptions);
+            return new ServerTemplate(this.serverName, this.serverProductOffer,
+                this.diskProductOffer, this.vdc, this.image, this.templateOptions);
         }
     }
 

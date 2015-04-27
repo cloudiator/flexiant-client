@@ -45,8 +45,7 @@ public class Server extends ResourceInLocationImpl {
         return (de.uniulm.omi.flexiant.extility.Server) this.resource;
     }
 
-    @Nullable
-    public String getPublicIpAddress() {
+    @Nullable public String getPublicIpAddress() {
         for (final Nic nic : this.getServer().getNics()) {
             if (nic.getNetworkType().equals(NetworkType.IP)) {
                 for (final Ip ip : nic.getIpAddresses()) {
@@ -59,18 +58,15 @@ public class Server extends ResourceInLocationImpl {
         return null;
     }
 
-    @Nullable
-    public String getPrivateIpAddress() {
+    @Nullable public String getPrivateIpAddress() {
         return this.getPublicIpAddress();
     }
 
-    @Nullable
-    public String getInitialUser() {
+    @Nullable public String getInitialUser() {
         return this.getServer().getInitialUser();
     }
 
-    @Nullable
-    public String getInitialPassword() {
+    @Nullable public String getInitialPassword() {
         return this.getServer().getInitialPassword();
     }
 }

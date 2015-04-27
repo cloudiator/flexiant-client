@@ -30,8 +30,7 @@ public class Location extends ResourceImpl {
 
     private final LocationScope locationScope;
 
-    @Nullable
-    private final Location parent;
+    @Nullable private final Location parent;
 
     public static Location from(Cluster cluster) {
         checkNotNull(cluster);
@@ -56,8 +55,7 @@ public class Location extends ResourceImpl {
         this.parent = null;
     }
 
-    @Nullable
-    public Location getParent() {
+    @Nullable public Location getParent() {
         return this.parent;
     }
 

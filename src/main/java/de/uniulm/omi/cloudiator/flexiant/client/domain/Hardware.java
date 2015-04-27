@@ -41,7 +41,8 @@ public class Hardware implements ResourceInLocation {
     private final ProductOffer machine;
     private final String locationUUID;
 
-    public static Hardware from(final ProductOffer machine, final ProductOffer disk, final String locationUUID) {
+    public static Hardware from(final ProductOffer machine, final ProductOffer disk,
+        final String locationUUID) {
         return new Hardware(machine, disk, locationUUID);
     }
 
@@ -61,7 +62,8 @@ public class Hardware implements ResourceInLocation {
                         diskOffers.add(productOffer);
                     }
 
-                    if ((value.getKey().equals(RAM_KEY) || value.getKey().equals(CPU_KEY)) && value.getValue() != null) {
+                    if ((value.getKey().equals(RAM_KEY) || value.getKey().equals(CPU_KEY))
+                        && value.getValue() != null) {
                         machineOffers.add(productOffer);
                     }
                 }
@@ -82,16 +84,20 @@ public class Hardware implements ResourceInLocation {
         return hardware;
     }
 
-    private Hardware(final ProductOffer machine, final ProductOffer disk, final String locationUUID) {
+    private Hardware(final ProductOffer machine, final ProductOffer disk,
+        final String locationUUID) {
 
         checkNotNull(machine);
         checkNotNull(disk);
         checkNotNull(locationUUID);
         checkArgument(!locationUUID.isEmpty());
 
-        checkArgument(this.searchForValueInProductOffer(CPU_KEY, machine) != null, "Machine Offer does not contain cpu key.");
-        checkArgument(this.searchForValueInProductOffer(RAM_KEY, machine) != null, "Machine Offer does not contain ram key.");
-        checkArgument(this.searchForValueInProductOffer(DISK_KEY, disk) != null, "Disk Offer does not contain disk key.");
+        checkArgument(this.searchForValueInProductOffer(CPU_KEY, machine) != null,
+            "Machine Offer does not contain cpu key.");
+        checkArgument(this.searchForValueInProductOffer(RAM_KEY, machine) != null,
+            "Machine Offer does not contain ram key.");
+        checkArgument(this.searchForValueInProductOffer(DISK_KEY, disk) != null,
+            "Disk Offer does not contain disk key.");
 
         checkArgument(machine.getClusters().contains(locationUUID));
         checkArgument(disk.getClusters().contains(locationUUID));
@@ -101,28 +107,24 @@ public class Hardware implements ResourceInLocation {
         this.locationUUID = locationUUID;
     }
 
-    @Override
-    public String getId() {
+    @Override public String getId() {
         return machine.getResourceUUID() + ":" + disk.getResourceUUID();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof Hardware && ((Hardware) obj).getId().equals(this.getId()) && ((Hardware) obj).getLocationUUID().equals(this.getLocationUUID());
+    @Override public boolean equals(Object obj) {
+        return obj instanceof Hardware && ((Hardware) obj).getId().equals(this.getId())
+            && ((Hardware) obj).getLocationUUID().equals(this.getLocationUUID());
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return (this.getId() + "/" + this.getLocationUUID()).hashCode();
     }
 
-    @Override
-    public String getName() {
+    @Override public String getName() {
         return "CPU" + this.getCores() + "RAM" + this.getRam();
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return String.format("FlexiantHardware{cores=%d, ram=%d}", this.getCores(), this.getRam());
     }
 
@@ -138,8 +140,7 @@ public class Hardware implements ResourceInLocation {
         return Integer.parseInt(value);
     }
 
-    @Nullable
-    private String searchForValueInProductOffer(String key, ProductOffer productOffer) {
+    @Nullable private String searchForValueInProductOffer(String key, ProductOffer productOffer) {
 
         checkNotNull(productOffer);
         checkNotNull(key);
@@ -155,8 +156,7 @@ public class Hardware implements ResourceInLocation {
         return null;
     }
 
-    @Override
-    public String getLocationUUID() {
+    @Override public String getLocationUUID() {
         return this.locationUUID;
     }
 }
