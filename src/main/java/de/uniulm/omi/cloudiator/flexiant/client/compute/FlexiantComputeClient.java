@@ -148,7 +148,8 @@ public class FlexiantComputeClient {
         throws FlexiantException {
         //noinspection unchecked
         return Hardware
-            .from(this.getResources(ResourceType.PRODUCTOFFER, ProductOffer.class, locationUUID));
+            .from(this.getResources(ResourceType.PRODUCTOFFER, ProductOffer.class, locationUUID),
+                this.getResources(ResourceType.CLUSTER, Cluster.class, null));
     }
 
     /**
