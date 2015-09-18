@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -58,12 +59,10 @@ public class Hardware implements ResourceInLocation {
         Set<ProductOffer> diskOffers = new HashSet<ProductOffer>();
 
         List<String> availableStringClusters = new ArrayList<>(availableClusters.size());
-        for (Cluster cluster : availableClusters) {
-            availableStringClusters.add(cluster.getResourceUUID());
-        }
+        availableStringClusters.addAll(
+            availableClusters.stream().map(Cluster::getResourceUUID).collect(Collectors.toList()));
 
         for (ProductOffer productOffer : offers) {
-
             for (ProductComponent productComponent : productOffer.getComponentConfig()) {
                 for (Value value : productComponent.getProductConfiguredValues()) {
 
@@ -79,18 +78,18 @@ public class Hardware implements ResourceInLocation {
             }
         }
 
-        Set<Hardware> hardware = new HashSet<Hardware>();
+        Set<Hardware> hardware = new HashSet<>();
         for (ProductOffer machineOffer : machineOffers) {
             for (ProductOffer diskOffer : diskOffers) {
 
-                List<String> machineOfferClusters = null;
+                List<String> machineOfferClusters;
                 if (machineOffer.getClusters().isEmpty()) {
                     machineOfferClusters = availableStringClusters;
                 } else {
                     machineOfferClusters = machineOffer.getClusters();
                 }
 
-                List<String> diskOfferClusters = null;
+                List<String> diskOfferClusters;
                 if (diskOffer.getClusters().isEmpty()) {
                     diskOfferClusters = availableStringClusters;
                 } else {
@@ -102,9 +101,9 @@ public class Hardware implements ResourceInLocation {
                 //assign to new variable
                 List<String> clustersForBoth = new ArrayList<>(machineOfferClusters);
 
-                for (String locationUUID : clustersForBoth) {
-                    hardware.add(Hardware.from(machineOffer, diskOffer, locationUUID));
-                }
+                hardware.addAll(clustersForBoth.stream()
+                    .map(locationUUID -> Hardware.from(machineOffer, diskOffer, locationUUID))
+                    .collect(Collectors.toList()));
             }
         }
 
@@ -126,7 +125,8 @@ public class Hardware implements ResourceInLocation {
         checkArgument(this.searchForValueInProductOffer(DISK_KEY, disk) != null,
             "Disk Offer does not contain disk key.");
 
-        checkArgument(machine.getClusters().isEmpty() || machine.getClusters().contains(locationUUID));
+        checkArgument(
+            machine.getClusters().isEmpty() || machine.getClusters().contains(locationUUID));
         checkArgument(disk.getClusters().isEmpty() || disk.getClusters().contains(locationUUID));
 
         this.machine = machine;
