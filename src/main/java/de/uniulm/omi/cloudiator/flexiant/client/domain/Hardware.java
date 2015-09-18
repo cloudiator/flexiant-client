@@ -167,6 +167,12 @@ public class Hardware implements ResourceInLocation {
         return Integer.parseInt(value);
     }
 
+    public Float getDiskSpace() {
+        String value = this.searchForValueInProductOffer(DISK_KEY, this.disk);
+        checkNotNull(value, "Disk offer dos not contain disk key.");
+        return Float.parseFloat(value);
+    }
+
     @Nullable private String searchForValueInProductOffer(String key, ProductOffer productOffer) {
 
         checkNotNull(productOffer);
