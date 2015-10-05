@@ -33,7 +33,7 @@
     <packaging>jar</packaging>
 
     <name>flexiant-client</name>
-    <description>The organizational pom for the cloudiator software project.</description>
+    <description>A client for flexiant FCO.</description>
     <url>https://github.com/cloudiator</url>
 
     <properties>
