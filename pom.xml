@@ -22,32 +22,40 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>de.uniulm.omi.cloudiator</groupId>
-        <artifactId>cloudiator-pom</artifactId>
-        <version>0.1.1-RELEASE</version>
+        <groupId>io.github.cloudiator</groupId>
+        <artifactId>project</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <!--suppress MavenRedundantGroupId -->
-    <groupId>de.uniulm.omi.cloudiator.flexiant</groupId>
+    <groupId>io.github.cloudiator.flexiant</groupId>
     <artifactId>flexiant-client</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>flexiant-client</name>
+    <description>The organizational pom for the cloudiator software project.</description>
+    <url>https://github.com/cloudiator</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <extility.version>b13-20150609</extility.version>
+        <extility.version>1.0.0-SNAPSHOT</extility.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>de.uniulm.omi.cloudiator.flexiant.extility</groupId>
+                <groupId>io.github.cloudiator.flexiant.extility</groupId>
                 <artifactId>extility-client</artifactId>
                 <version>${extility.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <scm>
+        <connection>scm:git@github.com:cloudiator/flexiant-client.git</connection>
+        <developerConnection>scm:git@github.com:cloudiator/flexiant-client.git</developerConnection>
+        <url>git@github.com:cloudiator/flexiant-client.git</url>
+    </scm>
 
     <dependencies>
         <dependency>
@@ -55,7 +63,7 @@
             <artifactId>junit</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.uniulm.omi.cloudiator.flexiant.extility</groupId>
+            <groupId>io.github.cloudiator.flexiant.extility</groupId>
             <artifactId>extility-client</artifactId>
         </dependency>
         <dependency>

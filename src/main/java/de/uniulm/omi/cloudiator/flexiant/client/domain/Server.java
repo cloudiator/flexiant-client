@@ -19,10 +19,10 @@
 package de.uniulm.omi.cloudiator.flexiant.client.domain;
 
 import de.uniulm.omi.cloudiator.flexiant.client.domain.generic.ResourceInLocationImpl;
-import de.uniulm.omi.flexiant.extility.Ip;
-import de.uniulm.omi.flexiant.extility.IpType;
-import de.uniulm.omi.flexiant.extility.NetworkType;
-import de.uniulm.omi.flexiant.extility.Nic;
+import io.github.cloudiator.flexiant.extility.Ip;
+import io.github.cloudiator.flexiant.extility.IpType;
+import io.github.cloudiator.flexiant.extility.NetworkType;
+import io.github.cloudiator.flexiant.extility.Nic;
 
 import javax.annotation.Nullable;
 
@@ -32,17 +32,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Wrapper for the flexiant server class.
  *
- * @see de.uniulm.omi.flexiant.extility.Server
+ * @see io.github.cloudiator.flexiant.extility.Server
  */
 public class Server extends ResourceInLocationImpl {
 
-    public Server(final de.uniulm.omi.flexiant.extility.Server server) {
+    public Server(final io.github.cloudiator.flexiant.extility.Server server) {
         super(server);
         checkNotNull(server);
     }
 
-    protected de.uniulm.omi.flexiant.extility.Server getServer() {
-        return (de.uniulm.omi.flexiant.extility.Server) this.resource;
+    protected io.github.cloudiator.flexiant.extility.Server getServer() {
+        return (io.github.cloudiator.flexiant.extility.Server) this.resource;
     }
 
     @Nullable public String getPublicIpAddress() {

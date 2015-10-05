@@ -19,10 +19,11 @@
 package de.uniulm.omi.cloudiator.flexiant.client.domain;
 
 import de.uniulm.omi.cloudiator.flexiant.client.api.ResourceInLocation;
-import de.uniulm.omi.flexiant.extility.Cluster;
-import de.uniulm.omi.flexiant.extility.ProductComponent;
-import de.uniulm.omi.flexiant.extility.ProductOffer;
-import de.uniulm.omi.flexiant.extility.Value;
+import io.github.cloudiator.flexiant.extility.Cluster;
+import io.github.cloudiator.flexiant.extility.ProductComponent;
+import io.github.cloudiator.flexiant.extility.ProductOffer;
+import io.github.cloudiator.flexiant.extility.Value;
+
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

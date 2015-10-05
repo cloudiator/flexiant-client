@@ -24,12 +24,12 @@ import javax.annotation.Nullable;
 
 public class Image extends ResourceInLocationImpl {
 
-    public Image(final de.uniulm.omi.flexiant.extility.Image image) {
+    public Image(final io.github.cloudiator.flexiant.extility.Image image) {
         super(image);
     }
 
-    protected de.uniulm.omi.flexiant.extility.Image getImage() {
-        return (de.uniulm.omi.flexiant.extility.Image) this.resource;
+    protected io.github.cloudiator.flexiant.extility.Image getImage() {
+        return (io.github.cloudiator.flexiant.extility.Image) this.resource;
     }
 
     @Nullable public String getDefaultUser() {

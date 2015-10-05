@@ -27,35 +27,30 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public abstract class ResourceImpl implements Resource {
 
-    protected final de.uniulm.omi.flexiant.extility.Resource resource;
+    protected final io.github.cloudiator.flexiant.extility.Resource resource;
 
-    public ResourceImpl(de.uniulm.omi.flexiant.extility.Resource resource) {
+    public ResourceImpl(io.github.cloudiator.flexiant.extility.Resource resource) {
         checkNotNull(resource);
         this.resource = resource;
     }
 
-    @Override
-    public String getId() {
+    @Override public String getId() {
         return this.resource.getResourceUUID();
     }
 
-    @Override
-    public String getName() {
+    @Override public String getName() {
         return this.resource.getResourceName();
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return this.getId().hashCode();
     }
 
-    @Override
-    public boolean equals(Object obj) {
+    @Override public boolean equals(Object obj) {
         return obj instanceof Resource && this.getId().equals(((Resource) obj).getId());
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return String.format("FlexiantResource{uuid=%s}", this.getId());
     }
 }
