@@ -19,8 +19,8 @@
 package de.uniulm.omi.cloudiator.flexiant.client.domain;
 
 import de.uniulm.omi.cloudiator.flexiant.client.domain.generic.ResourceImpl;
-import de.uniulm.omi.flexiant.extility.Cluster;
-import de.uniulm.omi.flexiant.extility.Vdc;
+import io.github.cloudiator.flexiant.extility.Cluster;
+import io.github.cloudiator.flexiant.extility.Vdc;
 
 import javax.annotation.Nullable;
 

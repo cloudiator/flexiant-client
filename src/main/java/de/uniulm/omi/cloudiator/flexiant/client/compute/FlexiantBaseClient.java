@@ -18,8 +18,9 @@
 
 package de.uniulm.omi.cloudiator.flexiant.client.compute;
 
-import de.uniulm.omi.flexiant.extility.UserAPI;
-import de.uniulm.omi.flexiant.extility.UserService;
+
+import io.github.cloudiator.flexiant.extility.UserAPI;
+import io.github.cloudiator.flexiant.extility.UserService;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
@@ -40,7 +41,7 @@ public class FlexiantBaseClient {
 
     /**
      * Constructor for the class.
-     * <p>
+     * <p/>
      * Creates a connection to the server at the given endpoint using
      * the apiUserName and password for auth.
      *

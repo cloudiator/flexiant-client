@@ -25,7 +25,7 @@ import de.uniulm.omi.cloudiator.flexiant.client.domain.generic.ResourceImpl;
  */
 public class Network extends ResourceImpl {
 
-    public Network(de.uniulm.omi.flexiant.extility.Network network) {
+    public Network(io.github.cloudiator.flexiant.extility.Network network) {
         super(network);
     }
 }
