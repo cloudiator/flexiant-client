@@ -26,7 +26,6 @@
         <artifactId>project</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
-    <!--suppress MavenRedundantGroupId -->
     <groupId>io.github.cloudiator.flexiant</groupId>
     <artifactId>flexiant-client</artifactId>
     <version>0.1.0-SNAPSHOT</version>
@@ -38,18 +37,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <extility.version>1.0.0-SNAPSHOT</extility.version>
+        <wsdl.url>https://cp.sd1.flexiant.net/soap/user/current/?wsdl</wsdl.url>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.github.cloudiator.flexiant.extility</groupId>
-                <artifactId>extility-client</artifactId>
-                <version>${extility.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <scm>
         <connection>scm:git@github.com:cloudiator/flexiant-client.git</connection>
@@ -63,10 +52,6 @@
             <artifactId>junit</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.github.cloudiator.flexiant.extility</groupId>
-            <artifactId>extility-client</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
@@ -76,7 +61,34 @@
         </dependency>
     </dependencies>
 
+
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jaxws-maven-plugin</artifactId>
+                    <version>1.12</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>wsimport</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <sourceDestDir>target/generated-sources/jaxws</sourceDestDir>
+                        <packageName>io.github.cloudiator.flexiant.extility</packageName>
+                        <wsdlUrls>
+                            <wsdlUrl>
+                                ${wsdl.url}
+                            </wsdlUrl>
+                        </wsdlUrls>
+                        <verbose>true</verbose>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -89,6 +101,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
