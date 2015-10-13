@@ -11,7 +11,7 @@ if [ "$TRAVIS_REPO_SLUG" == "cloudiator/flexiant-client" ] && \
    [ "$TRAVIS_BRANCH" == "master" ]; then
   echo "Publishing Maven snapshot..."
 
-  mvn clean source:jar javadoc:jar deploy --settings="util/settings.xml" -DskipTests=true
+  mvn clean deploy --settings="util/settings.xml" -DskipTests=true
 
   echo "Maven snapshot published."
 
