@@ -156,7 +156,7 @@ public class FlexiantComputeClient {
 
     /**
      * Retrieves the server having the given ip.
-     * <p/>
+     * <p>
      * It seems that flexiant does not allow to query by ip. Therefore, this
      * query loops through all servers, finding the ip.
      *
@@ -172,7 +172,7 @@ public class FlexiantComputeClient {
 
     /**
      * Retrieves the server having the ip and matching the given name filter.
-     * <p/>
+     * <p>
      * As we need to loop through all existing servers, the name filter can increase
      * the speed.
      *
@@ -254,7 +254,10 @@ public class FlexiantComputeClient {
         try {
             Job serverJob = this.getService().createServer(server, null, null, null);
             this.getService().waitForJob(serverJob.getResourceUUID(), true);
-            return this.getServer(serverJob.getItemUUID());
+            final de.uniulm.omi.cloudiator.flexiant.client.domain.Server createdServer =
+                this.getServer(serverJob.getItemUUID());
+            this.startServer(createdServer);
+            return createdServer;
         } catch (ExtilityException e) {
             throw new FlexiantException("Could not create server", e);
         }
