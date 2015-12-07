@@ -53,7 +53,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <wsdl.url>https://cp.sd1.flexiant.net/soap/user/current/?wsdl</wsdl.url>
     </properties>
-    
+
     <scm>
         <connection>scm:git:https://github.com/cloudiator/flexiant-client.git</connection>
         <developerConnection>scm:git:git@github.com:cloudiator/flexiant-client.git
