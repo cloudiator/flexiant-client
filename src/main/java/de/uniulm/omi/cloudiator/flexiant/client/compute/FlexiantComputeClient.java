@@ -30,8 +30,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Client for calling compute operations on flexiants extility api.
@@ -448,7 +447,12 @@ public class FlexiantComputeClient {
         }
         final Vdc vdc = this.getVdc(locationUUID);
         if (vdc != null) {
-            return Location.from(vdc, this.getCluster(vdc.getClusterUUID()));
+            final Cluster clusterofVDC = this.getCluster(vdc.getClusterUUID());
+            checkState(clusterofVDC != null, String.format(
+                "Error while retrieving cluster of vdc %s. VDC is in cluster %s, but this cluster "
+                    + "does not exist. Looks like the vdc is corrupted.", vdc,
+                vdc.getClusterUUID()));
+            return Location.from(vdc, clusterofVDC);
         }
         return null;
     }
