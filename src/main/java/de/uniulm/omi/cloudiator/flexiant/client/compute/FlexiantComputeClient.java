@@ -252,13 +252,31 @@ public class FlexiantComputeClient {
 
         try {
             Job serverJob = this.getService().createServer(server, null, null, null);
-            this.getService().waitForJob(serverJob.getResourceUUID(), true);
+            this.waitForJob(serverJob);
             final de.uniulm.omi.cloudiator.flexiant.client.domain.Server createdServer =
                 this.getServer(serverJob.getItemUUID());
+            checkState(createdServer != null, String.format(
+                "Execution of job %s for server %s was returned as successful, but the server could not be queried.",
+                serverJob.getResourceUUID(), serverJob.getItemUUID()));
             this.startServer(createdServer);
             return createdServer;
         } catch (ExtilityException e) {
             throw new FlexiantException("Could not create server", e);
+        }
+    }
+
+    private void waitForJob(Job job) throws FlexiantException {
+        try {
+            Job waitForJob = this.getService().waitForJob(job.getResourceUUID(), true);
+            if (!waitForJob.getStatus().equals(JobStatus.SUCCESSFUL)) {
+                throw new FlexiantException(String.format(
+                    "Problem during execution of job %s for item %s. Successfully waited for execution of job, but execution was not successful. Job is in status %s.",
+                    job.getResourceUUID(), job.getItemUUID(), job.getStatus()));
+            }
+        } catch (ExtilityException e) {
+            throw new FlexiantException(String
+                .format("Error during execution of job %s for item %s. Job failed with exception.",
+                    job.getResourceUUID(), job.getItemUUID()), e);
         }
     }
 
@@ -344,7 +362,7 @@ public class FlexiantComputeClient {
     protected void deleteResource(final String uuid) throws FlexiantException {
         try {
             final Job job = this.getService().deleteResource(uuid, true, null);
-            this.getService().waitForJob(job.getResourceUUID(), true);
+            this.waitForJob(job);
         } catch (ExtilityException e) {
             throw new FlexiantException("Could not delete resource", e);
         }
@@ -361,7 +379,7 @@ public class FlexiantComputeClient {
         throws FlexiantException {
         try {
             Job job = this.getService().changeServerStatus(serverUUID, status, true, null, null);
-            this.getService().waitForJob(job.getResourceUUID(), true);
+            this.waitForJob(job);
         } catch (ExtilityException e) {
             throw new FlexiantException("Could not start server", e);
         }
